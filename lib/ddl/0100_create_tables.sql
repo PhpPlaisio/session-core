@@ -12,7 +12,7 @@
 /*================================================================================*/
 
 CREATE TABLE ABC_AUTH_SESSION (
-  ses_id INT AUTO_INCREMENT NOT NULL,
+  ses_id INT UNSIGNED AUTO_INCREMENT NOT NULL,
   cmp_id SMALLINT UNSIGNED NOT NULL,
   lan_id TINYINT UNSIGNED NOT NULL,
   usr_id INT UNSIGNED NOT NULL,
