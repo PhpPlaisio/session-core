@@ -17,7 +17,7 @@ modifies sql data
 begin
   update     ABC_AUTH_SESSION ses
   inner join AUT_COMPANY      cmp  on  cmp.cmp_id = ses.cmp_id
-  inner join AUT_USER         usr  on  usr.cmp_id = ses.usr_id and
+  inner join AUT_USER         usr  on  usr.cmp_id = ses.cmp_id and
                                        usr.usr_anonymous = 1
   inner join BBL_LANGUAGE     lan  on  lan.lan_code = p_lan_code
   set ses.ses_session_token = p_ses_session_token
