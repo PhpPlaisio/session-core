@@ -1,0 +1,39 @@
+/**
+ * Logs the current user out of the current session.
+ *
+ * @param p_cmp_id            The ID of the company (safe guard).
+ * @param p_ses_id            The ID of the session.
+ * @param p_ses_session_token The new session token.
+ * @param p_ses_csrf_token    The new CSRF token.
+ */
+create procedure abc_auth_session_logout(in p_cmp_id            @abc_auth_session.cmp_id%type@,
+                                         in p_ses_id            @abc_auth_session.ses_id%type@,
+                                         in p_ses_session_token @abc_auth_session.ses_session_token%type@,
+                                         in p_ses_csrf_token    @abc_auth_session.ses_csrf_token%type@)
+modifies sql data
+-- type: row1
+begin
+  declare l_usr_id   @aut_user.usr_id%type@;
+  declare l_cmp_abbr @aut_company.cmp_abbr%type@;
+
+  select usr.usr_id
+  ,      cmp.cmp_abbr
+  into   l_usr_id
+  ,      l_cmp_abbr
+  from       AUT_USER    usr
+  inner join AUT_COMPANY cmp  on  cmp.cmp_id = usr.cmp_id
+  where  usr.cmp_id        = p_cmp_id
+  and    usr.usr_anonymous = 1
+  ;
+
+  update ABC_AUTH_SESSION
+  set usr_id            = l_usr_id
+  ,   ses_session_token = p_ses_session_token
+  ,   ses_csrf_token    = p_ses_csrf_token
+  ,   ses_data          = null
+  where ses_id = p_ses_id
+  and   cmp_id = p_cmp_id
+  ;
+
+  call abc_auth_session_get_session(l_cmp_abbr, p_ses_session_token);
+end

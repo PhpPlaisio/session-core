@@ -1,0 +1,51 @@
+/**
+ * Marks a user as successfully logged in in the current session.
+ *
+ * @param p_cmp_id            The ID of the company (safe guard).
+ * @param p_ses_id            The ID of the session.
+ * @param p_usr_id            The ID of the user.
+ * @param p_ses_session_token The new session token.
+ * @param p_ses_csrf_token    The new CSRF token.
+ */
+create procedure abc_auth_session_login(in p_cmp_id            @abc_auth_session.cmp_id%type@,
+                                        in p_ses_id            @abc_auth_session.ses_id%type@,
+                                        in p_usr_id            @abc_auth_session.usr_id%type@,
+                                        in p_ses_session_token @abc_auth_session.ses_session_token%type@,
+                                        in p_ses_csrf_token    @abc_auth_session.ses_csrf_token%type@)
+modifies sql data
+-- type: row1
+begin
+  declare l_lan_id   @aut_user.lan_id%type@;
+  declare l_cmp_abbr @aut_company.cmp_abbr%type@;
+
+  select usr.lan_id
+  ,      cmp.cmp_abbr
+  into   l_lan_id
+  ,      l_cmp_abbr
+  from       AUT_USER    usr
+  inner join AUT_COMPANY cmp  on  cmp.cmp_id = usr.cmp_id
+  where usr.usr_id = p_usr_id
+  and   usr.cmp_id = p_cmp_id
+  ;
+
+  update ABC_AUTH_SESSION
+  set lan_id            = l_lan_id
+  ,   usr_id            = p_usr_id
+  ,   ses_session_token = p_ses_session_token
+  ,   ses_csrf_token    = p_ses_csrf_token
+  where ses_id = p_ses_id
+  and   cmp_id = p_cmp_id
+  ;
+
+  -- Don't log changes on column usr_last_login in nahouw_change_log.
+  set @nah_g_skip_nah_user = 1;
+
+  update AUT_USER
+  set    usr_last_login = now()
+  where  usr_id = p_usr_id
+  ;
+
+  set @nah_g_skip_nah_user = null;
+
+  call abc_auth_session_get_session(l_cmp_abbr, p_ses_session_token);
+end

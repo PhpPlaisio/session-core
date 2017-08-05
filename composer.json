@@ -1,0 +1,36 @@
+{
+  "name": "setbased/abc-session-core",
+  "description": "ABC-Framework: Core Session",
+  "keywords": [
+    "ABC-Framework",
+    "Session",
+    "Core"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.0.0",
+    "setbased/abc": "^0.10.0",
+    "setbased/abc-session": "^0.9.0"
+  },
+  "require-dev": {
+    "phing/phing": "^2.0",
+    "setbased/php-stratum": "^0.9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "SetBased\\Abc\\Session\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SetBased\\Abc\\Session\\Test\\": "test/"
+    },
+    "classmap": [
+      "test/C.php"
+      ]
+  },
+  "config": {
+    "bin-dir": "bin"
+  }
+}

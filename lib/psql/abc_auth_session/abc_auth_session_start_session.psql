@@ -1,0 +1,36 @@
+/**
+ * Starts a new session.
+ *
+ * @param p_cmp_abbr          The ID of the company of the user (safe guard).
+ * @param p_lan_code          The code of the language of the session.
+ * @param p_ses_session_token The session token.
+ * @param p_ses_csrf_token    The CSRF token.
+ */
+create procedure abc_auth_session_start_session(in p_cmp_abbr          @aut_company.cmp_abbr%type@,
+                                                in p_lan_code          @bbl_language.lan_code%type@,
+                                                in p_ses_session_token @abc_auth_session.ses_session_token%type@,
+                                                in p_ses_csrf_token    @abc_auth_session.ses_csrf_token%type@)
+modifies sql data
+-- type: row1
+begin
+  insert into ABC_AUTH_SESSION(cmp_id
+  ,                            lan_id
+  ,                            usr_id
+  ,                            ses_session_token
+  ,                            ses_csrf_token
+  ,                            ses_last_request)
+  select cmp.cmp_id
+  ,      lan.lan_id
+  ,      usr.usr_id
+  ,      p_ses_session_token
+  ,      p_ses_csrf_token
+  ,      unix_timestamp()
+  from       AUT_COMPANY  cmp
+  inner join AUT_USER     usr  on  usr.cmp_id = cmp.cmp_id
+  inner join BBL_LANGUAGE lan  on  lan.lan_code = p_lan_code
+  where cmp.cmp_abbr      = p_cmp_abbr
+  and   usr.usr_anonymous = 1
+  ;
+
+  call abc_auth_session_get_session(p_cmp_abbr, p_ses_session_token);
+end
