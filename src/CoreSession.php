@@ -1,9 +1,8 @@
 <?php
 //----------------------------------------------------------------------------------------------------------------------
-namespace Nahouw\Abc;
+namespace SetBased\Abc\Session;
 
 use SetBased\Abc\Abc;
-use SetBased\Abc\Session\Session;
 
 /**
  * A session handler that stores the session data in a database table.
