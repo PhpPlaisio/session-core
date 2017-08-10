@@ -3,13 +3,13 @@
  *
  * @param p_ses_id            The ID of the session.
  * @param p_cmp_abbr          The ID of the company of the user (safe guard).
- * @param p_lan_code          The code of the language of the session.
+ * @param p_lan_id            The ID of the language of the session.
  * @param p_ses_session_token The new session token.
  * @param p_ses_csrf_token    The new CSRF token.
  */
 create procedure abc_auth_session_restart_session(in p_ses_id            @abc_auth_session.ses_id%type@,
                                                   in p_cmp_abbr          @aut_company.cmp_abbr%type@,
-                                                  in p_lan_code          @bbl_language.lan_code%type@,
+                                                  in p_lan_id            @bbl_language.lan_id%type@,
                                                   in p_ses_session_token @abc_auth_session.ses_session_token%type@,
                                                   in p_ses_csrf_token    @abc_auth_session.ses_csrf_token%type@)
 modifies sql data
@@ -19,10 +19,9 @@ begin
   inner join AUT_COMPANY      cmp  on  cmp.cmp_id = ses.cmp_id
   inner join AUT_USER         usr  on  usr.cmp_id = ses.cmp_id and
                                        usr.usr_anonymous = 1
-  inner join BBL_LANGUAGE     lan  on  lan.lan_code = p_lan_code
   set ses.ses_session_token = p_ses_session_token
   ,   ses.ses_csrf_token    = p_ses_csrf_token
-  ,   ses.lan_id            = lan.lan_id
+  ,   ses.lan_id            = p_lan_id
   ,   ses.usr_id            = usr.usr_id
   ,   ses.ses_data          = null
   where cmp.cmp_abbr = p_cmp_abbr
