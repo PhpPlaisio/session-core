@@ -1,10 +1,10 @@
 /**
  * Gets a session based a session token.
  *
- * @param p_cmp_abbr          The ID of the company of the user (safe guard).
+ * @param p_cmp_id            The ID of the company of the user (safe guard).
  * @param p_ses_session_token The session token.
  */
-create procedure abc_auth_session_get_session(in p_cmp_abbr          @aut_company.cmp_abbr%type@,
+create procedure abc_auth_session_get_session(in p_cmp_id            @abc_auth_session.cmp_id%type@,
                                               in p_ses_session_token @abc_auth_session.ses_session_token%type@)
 modifies sql data
 -- type: row0
@@ -29,6 +29,6 @@ begin
   inner join AUT_USER         usr  on  usr.usr_id = ses.usr_id
   inner join AUT_PROFILE      pro  on  pro.pro_id = usr.pro_id
   where  ses.ses_session_token = p_ses_session_token
-  and    cmp.cmp_abbr          = p_cmp_abbr
+  and    cmp.cmp_id            = p_cmp_id
   ;
 end

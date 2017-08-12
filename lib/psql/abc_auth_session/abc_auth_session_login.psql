@@ -15,17 +15,13 @@ create procedure abc_auth_session_login(in p_cmp_id            @abc_auth_session
 modifies sql data
 -- type: row1
 begin
-  declare l_lan_id   @aut_user.lan_id%type@;
-  declare l_cmp_abbr @aut_company.cmp_abbr%type@;
+  declare l_lan_id @aut_user.lan_id%type@;
 
-  select usr.lan_id
-  ,      cmp.cmp_abbr
+  select lan_id
   into   l_lan_id
-  ,      l_cmp_abbr
-  from       AUT_USER    usr
-  inner join AUT_COMPANY cmp  on  cmp.cmp_id = usr.cmp_id
-  where usr.usr_id = p_usr_id
-  and   usr.cmp_id = p_cmp_id
+  from   AUT_USER
+  where  usr_id = p_usr_id
+  and    cmp_id = p_cmp_id
   ;
 
   update ABC_AUTH_SESSION
@@ -38,14 +34,14 @@ begin
   ;
 
   -- Don't log changes on column usr_last_login in nahouw_change_log.
-  set @nah_g_skip_nah_user = 1;
+  set @nah_g_skip_aut_user = 1;
 
   update AUT_USER
   set    usr_last_login = now()
   where  usr_id = p_usr_id
   ;
 
-  set @nah_g_skip_nah_user = null;
+  set @nah_g_skip_aut_user = null;
 
-  call abc_auth_session_get_session(l_cmp_abbr, p_ses_session_token);
+  call abc_auth_session_get_session(p_cmp_id, p_ses_session_token);
 end

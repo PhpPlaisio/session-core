@@ -13,17 +13,13 @@ create procedure abc_auth_session_logout(in p_cmp_id            @abc_auth_sessio
 modifies sql data
 -- type: row1
 begin
-  declare l_usr_id   @aut_user.usr_id%type@;
-  declare l_cmp_abbr @aut_company.cmp_abbr%type@;
+  declare l_usr_id @aut_user.usr_id%type@;
 
-  select usr.usr_id
-  ,      cmp.cmp_abbr
+  select usr_id
   into   l_usr_id
-  ,      l_cmp_abbr
-  from       AUT_USER    usr
-  inner join AUT_COMPANY cmp  on  cmp.cmp_id = usr.cmp_id
-  where  usr.cmp_id        = p_cmp_id
-  and    usr.usr_anonymous = 1
+  from   AUT_USER
+  where  cmp_id        = p_cmp_id
+  and    usr_anonymous = 1
   ;
 
   update ABC_AUTH_SESSION
@@ -35,5 +31,5 @@ begin
   and   cmp_id = p_cmp_id
   ;
 
-  call abc_auth_session_get_session(l_cmp_abbr, p_ses_session_token);
+  call abc_auth_session_get_session(p_cmp_id, p_ses_session_token);
 end
