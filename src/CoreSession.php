@@ -132,6 +132,9 @@ class CoreSession implements Session
    */
   public function login($usrId)
   {
+    // Return immediately for fake (a.k.a. non-persistent) sessions.
+    if ($this->session['ses_id']===null) return;
+
     $this->session['ses_session_token'] = self::getRandomToken();
     $this->session['ses_csrf_token']    = self::getRandomToken();
 
@@ -151,6 +154,9 @@ class CoreSession implements Session
    */
   public function logout()
   {
+    // Return immediately for fake (a.k.a. non-persistent) sessions.
+    if ($this->session['ses_id']===null) return;
+
     $this->session['ses_session_token'] = self::getRandomToken();
     $this->session['ses_csrf_token']    = self::getRandomToken();
 
@@ -169,12 +175,11 @@ class CoreSession implements Session
    */
   public function save()
   {
-    if ($this->session['ses_id']!==null)
-    {
-      $serial = (!empty($_SESSION)) ? serialize($_SESSION) : null;
+    // Return immediately for fake (a.k.a. non-persistent) sessions.
+    if ($this->session['ses_id']===null) return;
 
-      Abc::$DL->abcAuthSessionUpdateSession($this->session['cmp_id'], $this->session['ses_id'], $serial);
-    }
+    $serial = (!empty($_SESSION)) ? serialize($_SESSION) : null;
+    Abc::$DL->abcAuthSessionUpdateSession($this->session['cmp_id'], $this->session['ses_id'], $serial);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -185,8 +190,10 @@ class CoreSession implements Session
    */
   public function setLanId($lanId)
   {
-    $this->session['lan_id'] = $lanId;
+    // Return immediately for fake (a.k.a. non-persistent) sessions.
+    if ($this->session['ses_id']===null) return;
 
+    $this->session['lan_id'] = $lanId;
     Abc::$DL->abcAuthSessionUpdateLanId($this->session['cmp_id'], $this->session['ses_id'], $lanId);
   }
 
