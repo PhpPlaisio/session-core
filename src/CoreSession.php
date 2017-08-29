@@ -48,7 +48,7 @@ class CoreSession implements Session
   private static function getRandomToken()
   {
     $handle = fopen(self::$entropyFile, 'rb');
-    $token  = bin2hex(hash('sha256', fgets($handle, self::$entropyLength), true));
+    $token  = hash('sha256', fread($handle, self::$entropyLength));
     fclose($handle);
 
     return $token;
