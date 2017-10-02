@@ -33,15 +33,15 @@ begin
   and   cmp_id = p_cmp_id
   ;
 
-  -- Don't log changes on column usr_last_login in nahouw_change_log.
-  set @nah_g_skip_aut_user = 1;
+  -- Prevent logging updates of column usr_last_login.
+  set @abc_g_skip_aut_user = 1;
 
   update AUT_USER
   set    usr_last_login = now()
   where  usr_id = p_usr_id
   ;
 
-  set @nah_g_skip_aut_user = null;
+  set @abc_g_skip_aut_user = null;
 
   call abc_auth_session_get_session(p_cmp_id, p_ses_session_token);
 end
