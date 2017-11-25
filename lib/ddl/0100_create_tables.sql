@@ -1,11 +1,11 @@
 /*================================================================================*/
 /* DDL SCRIPT                                                                     */
 /*================================================================================*/
-/*  Title    :                                                                    */
+/*  Title    : ABC-Framework: Core Session                                        */
 /*  FileName : abc-session-core.ecm                                               */
 /*  Platform : MySQL 5.6                                                          */
-/*  Version  : Concept                                                            */
-/*  Date     : zaterdag 5 augustus 2017                                           */
+/*  Version  :                                                                    */
+/*  Date     : zaterdag 25 november 2017                                          */
 /*================================================================================*/
 /*================================================================================*/
 /* CREATE TABLES                                                                  */
@@ -19,7 +19,7 @@ CREATE TABLE ABC_AUTH_SESSION (
   ses_session_token VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   ses_csrf_token VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   ses_last_request BIGINT UNSIGNED NOT NULL,
-  ses_data BLOB,
+  ses_data LONGBLOB,
   CONSTRAINT PK_ABC_AUTH_SESSION PRIMARY KEY (ses_id)
 );
 

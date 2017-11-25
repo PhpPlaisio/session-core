@@ -56,7 +56,11 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Returns the ID of company of the current session.
+   *
+   * @return int
+   *
+   * @deprecated Use Abc::$companyResolver->getCmpId() instead.
    */
   public function getCmpId()
   {
@@ -65,7 +69,9 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Returns stateful double submit token to prevent CSRF attacks.
+   *
+   * @return string
    */
   public function getCsrfToken()
   {
@@ -74,7 +80,9 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Returns the ID of preferred language of the user of the current session.
+   *
+   * @return int
    */
   public function getLanId()
   {
@@ -83,7 +91,9 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Returns the ID of the profile of the user of the current session.
+   *
+   * @return int
    */
   public function getProId()
   {
@@ -92,7 +102,9 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Returns the ID of the current session.
+   *
+   * @return int|null
    */
   public function getSesId()
   {
@@ -101,7 +113,9 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Returns the session token.
+   *
+   * @return string
    */
   public function getSessionToken()
   {
@@ -110,7 +124,9 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Returns the ID of the user of the current session.
+   *
+   * @return int
    */
   public function getUsrId()
   {
@@ -119,7 +135,9 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Returns true if the user is anonymous (i.e. not a user who has logged in). Otherwise, returns false.
+   *
+   * @return bool
    */
   public function isAnonymous()
   {
@@ -128,7 +146,9 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Updates the session that an user has successfully logged in.
+   *
+   * @param int $usrId The ID the user.
    */
   public function login($usrId)
   {
@@ -150,7 +170,7 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Terminates the current session.
    */
   public function logout()
   {
@@ -171,7 +191,7 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Saves the current state of the session.
    */
   public function save()
   {
@@ -199,7 +219,7 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * {@inheritdoc}
+   * Creates a session or resumes the current session based on the session cookie.
    */
   public function start()
   {
