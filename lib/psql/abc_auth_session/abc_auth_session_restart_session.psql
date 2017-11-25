@@ -16,8 +16,8 @@ modifies sql data
 -- type: row1
 begin
   update     ABC_AUTH_SESSION ses
-  inner join AUT_COMPANY      cmp  on  cmp.cmp_id = ses.cmp_id
-  inner join AUT_USER         usr  on  usr.cmp_id = ses.cmp_id and
+  inner join ABC_AUTH_COMPANY cmp  on  cmp.cmp_id = ses.cmp_id
+  inner join ABC_AUTH_USER    usr  on  usr.cmp_id = ses.cmp_id and
                                        usr.usr_anonymous = 1
   set ses.ses_session_token = p_ses_session_token
   ,   ses.ses_csrf_token    = p_ses_csrf_token

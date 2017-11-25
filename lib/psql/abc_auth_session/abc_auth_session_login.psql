@@ -15,11 +15,11 @@ create procedure abc_auth_session_login(in p_cmp_id            @abc_auth_session
 modifies sql data
 -- type: row1
 begin
-  declare l_lan_id @aut_user.lan_id%type@;
+  declare l_lan_id @abc_auth_user.lan_id%type@;
 
   select lan_id
   into   l_lan_id
-  from   AUT_USER
+  from   ABC_AUTH_USER
   where  usr_id = p_usr_id
   and    cmp_id = p_cmp_id
   ;
@@ -34,14 +34,14 @@ begin
   ;
 
   -- Prevent logging updates of column usr_last_login.
-  set @abc_g_skip_aut_user = 1;
+  set @abc_g_skip_abc_auth_user = 1;
 
-  update AUT_USER
+  update ABC_AUTH_USER
   set    usr_last_login = now()
   where  usr_id = p_usr_id
   ;
 
-  set @abc_g_skip_aut_user = null;
+  set @abc_g_skip_abc_auth_user = null;
 
   call abc_auth_session_get_session(p_cmp_id, p_ses_session_token);
 end

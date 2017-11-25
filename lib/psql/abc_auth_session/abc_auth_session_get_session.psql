@@ -25,9 +25,9 @@ begin
   ,      pro.pro_id
   ,      pro.pro_flags
   from       ABC_AUTH_SESSION ses
-  inner join AUT_COMPANY      cmp  on  cmp.cmp_id = ses.cmp_id
-  inner join AUT_USER         usr  on  usr.usr_id = ses.usr_id
-  inner join AUT_PROFILE      pro  on  pro.pro_id = usr.pro_id
+  inner join ABC_AUTH_COMPANY cmp  on  cmp.cmp_id = ses.cmp_id
+  inner join ABC_AUTH_USER    usr  on  usr.usr_id = ses.usr_id
+  inner join ABC_AUTH_PROFILE pro  on  pro.pro_id = usr.pro_id
   where  ses.ses_session_token = p_ses_session_token
   and    cmp.cmp_id            = p_cmp_id
   ;

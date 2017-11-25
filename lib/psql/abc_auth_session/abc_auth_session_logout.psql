@@ -13,11 +13,11 @@ create procedure abc_auth_session_logout(in p_cmp_id            @abc_auth_sessio
 modifies sql data
 -- type: row1
 begin
-  declare l_usr_id @aut_user.usr_id%type@;
+  declare l_usr_id @abc_auth_user.usr_id%type@;
 
   select usr_id
   into   l_usr_id
-  from   AUT_USER
+  from   ABC_AUTH_USER
   where  cmp_id        = p_cmp_id
   and    usr_anonymous = 1
   ;
