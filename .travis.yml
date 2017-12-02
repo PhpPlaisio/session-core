@@ -16,6 +16,7 @@ before_install:
 
 install:
   - composer self-update
+  - cp test/C.txt test/C.php
   - composer update
 
 script:
