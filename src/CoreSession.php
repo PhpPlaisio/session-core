@@ -130,7 +130,7 @@ class CoreSession implements Session
    */
   public function isAnonymous()
   {
-    return $this->session['usr_anonymous'];
+    return !empty($this->session['usr_anonymous']);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

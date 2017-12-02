@@ -35,6 +35,66 @@ class CoreSessionTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test an expired anonymous session will be replaced with new session.
+   */
+  public function testExpiredSession1()
+  {
+    $_COOKIE['ses_session_token'] = null;
+
+    $session1 = new CoreSession();
+    $session1->start();
+    $token1             = $session1->getSessionToken();
+    $_SESSION['string'] = 'hello world';
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    CoreSession::$timeout = 3;
+    sleep(5);
+
+    $session2 = new CoreSession();
+    $session2->start();
+    $token2 = $session2->getSessionToken();
+
+    self::assertNotEquals($token1, $token2);
+    self::assertEmpty($_SESSION);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test an expired logged in session will be replaced with new session.
+   */
+  public function testExpiredSession2()
+  {
+    $_COOKIE['ses_session_token'] = null;
+
+    $session1 = new CoreSession();
+    $session1->start();
+    $session1->login(3);
+    $token1             = $session1->getSessionToken();
+    $_SESSION['string'] = 'hello world';
+    $session1->save();
+
+    self::assertFalse($session1->isAnonymous());
+    self::assertEquals(3, $session1->getUsrId());
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    CoreSession::$timeout = 3;
+    sleep(5);
+
+    $session2 = new CoreSession();
+    $session2->start();
+    $token2 = $session2->getSessionToken();
+
+    self::assertNotEquals($token1, $token2);
+    self::assertEmpty($_SESSION);
+    self::assertEquals(2, $session2->getUsrId());
+    self::assertTrue($session2->isAnonymous());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test method getCsrfToken().
    */
   public function testGetCsrfToken()
@@ -125,6 +185,31 @@ class CoreSessionTest extends TestCase
     $token3 = $session3->getSessionToken();
 
     self::assertNotEquals($token1, $token3);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Tests for method setLanId().
+   */
+  public function testSetLanId()
+  {
+    $_COOKIE['ses_session_token'] = null;
+
+    $session1 = new CoreSession();
+    $session1->start();
+    $token1 = $session1->getSessionToken();
+    $lanId1 = $session1->getLanId();
+    $session1->setLanId(C::LAN_ID_NL);
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    $session2 = new CoreSession();
+    $session2->start();
+    $lanId2 = $session1->getLanId();
+
+    self::assertNotEquals(C::LAN_ID_NL, $lanId1);
+    self::assertEquals(C::LAN_ID_NL, $lanId2);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
