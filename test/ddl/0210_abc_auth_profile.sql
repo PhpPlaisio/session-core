@@ -5,7 +5,7 @@ insert into ABC_AUTH_PROFILE( pro_id
 values( 1
 ,       1
 ,       0
-,       '-')
+,       '1')
 ;
 
 
@@ -16,7 +16,7 @@ insert into ABC_AUTH_PROFILE( pro_id
 values( 2
 ,       2
 ,       0
-,       '-')
+,       '2')
 ;
 
 
