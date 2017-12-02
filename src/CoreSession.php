@@ -11,13 +11,6 @@ class CoreSession implements Session
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * The source for randomness.
-   *
-   * @var string
-   */
-  public static $entropyFile = '/dev/urandom';
-
-  /**
    * The number of bytes the be read from the source of randomness.
    *
    * @var int
@@ -47,11 +40,7 @@ class CoreSession implements Session
    */
   private static function getRandomToken()
   {
-    $handle = fopen(self::$entropyFile, 'rb');
-    $token  = hash('sha256', fread($handle, self::$entropyLength));
-    fclose($handle);
-
-    return $token;
+    return hash('sha256', random_bytes(self::$entropyLength));
   }
 
   //--------------------------------------------------------------------------------------------------------------------
