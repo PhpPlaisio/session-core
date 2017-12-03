@@ -45,19 +45,6 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns the ID of company of the current session.
-   *
-   * @return int
-   *
-   * @deprecated Use Abc::$companyResolver->getCmpId() instead.
-   */
-  public function getCmpId()
-  {
-    return $this->session['cmp_id'];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Returns stateful double submit token to prevent CSRF attacks.
    *
    * @return string

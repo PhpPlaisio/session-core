@@ -11,10 +11,10 @@
   "require": {
     "php": ">=7.0.0",
     "setbased/abc": "^0.10.4",
-    "setbased/abc-session": "^0.9.1"
+    "setbased/abc-session": "^0.9.3"
   },
   "require-dev": {
-    "phing/phing": "^2.0",
+    "phing/phing": "^2.0.0",
     "phpunit/phpunit": "^6.0.0",
     "setbased/abc-babel-core": "^0.10.7",
     "setbased/abc-company": "^1.0.0",
@@ -38,6 +38,6 @@
       ]
   },
   "config": {
-    "bin-dir": "bin"
+    "bin-dir": "bin/"
   }
 }
