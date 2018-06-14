@@ -1,5 +1,5 @@
 <?php
-//----------------------------------------------------------------------------------------------------------------------
+
 namespace SetBased\Abc\Session;
 
 use SetBased\Abc\Abc;
@@ -38,7 +38,7 @@ class CoreSession implements Session
    *
    * @return string
    */
-  private static function getRandomToken()
+  private static function getRandomToken(): string
   {
     return hash('sha256', random_bytes(self::$entropyLength));
   }
@@ -49,7 +49,7 @@ class CoreSession implements Session
    *
    * @return string
    */
-  public function getCsrfToken()
+  public function getCsrfToken(): string
   {
     return $this->session['ses_csrf_token'];
   }
@@ -60,7 +60,7 @@ class CoreSession implements Session
    *
    * @return int
    */
-  public function getLanId()
+  public function getLanId(): int
   {
     return $this->session['lan_id'];
   }
@@ -71,7 +71,7 @@ class CoreSession implements Session
    *
    * @return int
    */
-  public function getProId()
+  public function getProId(): int
   {
     return $this->session['pro_id'];
   }
@@ -82,7 +82,7 @@ class CoreSession implements Session
    *
    * @return int|null
    */
-  public function getSesId()
+  public function getSesId(): ?int
   {
     return $this->session['ses_id'];
   }
@@ -93,7 +93,7 @@ class CoreSession implements Session
    *
    * @return string
    */
-  public function getSessionToken()
+  public function getSessionToken(): string
   {
     return $this->session['ses_session_token'];
   }
@@ -104,7 +104,7 @@ class CoreSession implements Session
    *
    * @return int
    */
-  public function getUsrId()
+  public function getUsrId(): int
   {
     return $this->session['usr_id'];
   }
@@ -115,7 +115,7 @@ class CoreSession implements Session
    *
    * @return bool
    */
-  public function isAnonymous()
+  public function isAnonymous(): bool
   {
     return !empty($this->session['usr_anonymous']);
   }
@@ -126,7 +126,7 @@ class CoreSession implements Session
    *
    * @param int $usrId The ID the user.
    */
-  public function login($usrId)
+  public function login(int $usrId): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
@@ -148,7 +148,7 @@ class CoreSession implements Session
   /**
    * Terminates the current session.
    */
-  public function logout()
+  public function logout(): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
@@ -169,7 +169,7 @@ class CoreSession implements Session
   /**
    * Saves the current state of the session.
    */
-  public function save()
+  public function save(): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
@@ -184,7 +184,7 @@ class CoreSession implements Session
    *
    * @param int $lanId The ID of the language.
    */
-  public function setLanId($lanId)
+  public function setLanId(int $lanId): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
@@ -197,7 +197,7 @@ class CoreSession implements Session
   /**
    * Creates a session or resumes the current session based on the session cookie.
    */
-  public function start()
+  public function start(): void
   {
     $sesSessionToken = $_COOKIE['ses_session_token'] ?? null;
     if ($sesSessionToken===null)
@@ -240,7 +240,7 @@ class CoreSession implements Session
   /**
    * Sets the session and CSRF cookies.
    */
-  protected function setCookies()
+  protected function setCookies(): void
   {
     if (isset($_SERVER['HTTPS']))
     {
@@ -270,7 +270,7 @@ class CoreSession implements Session
   /**
    * Unpacks the session data and initializes $_SESSION.
    */
-  protected function unpackSession()
+  protected function unpackSession(): void
   {
     if ($this->session['ses_data']!==null)
     {

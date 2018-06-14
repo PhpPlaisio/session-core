@@ -9,17 +9,17 @@
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": ">=7.0.0",
-    "setbased/abc": "^0.10.4",
-    "setbased/abc-session": "^0.9.3"
+    "php": ">=7.1.0",
+    "setbased/abc": "^0.10.7",
+    "setbased/abc-session": "^0.9.5"
   },
   "require-dev": {
     "phing/phing": "^2.0.0",
     "phpunit/phpunit": "^6.0.0",
     "setbased/abc-babel-core": "^0.10.9",
     "setbased/abc-company": "^1.1.0",
-    "setbased/abc-company-resolver-uni": "^1.0.0",
-    "setbased/abc-language-resolver-core": "^1.0.0",
+    "setbased/abc-company-resolver-uni": "^2.0.0",
+    "setbased/abc-language-resolver-core": "^3.0.0",
     "setbased/abc-profile": "^1.1.0",
     "setbased/abc-user": "^1.1.0",
     "setbased/php-stratum": "^0.9.0"
