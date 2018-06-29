@@ -22,6 +22,16 @@ begin
   and    usr_anonymous = 1
   ;
 
+  delete from ABC_AUTH_SESSION_NAMED_LOCK
+  where ses_id = p_ses_id
+  and   cmp_id = p_cmp_id
+  ;
+
+  delete from ABC_AUTH_SESSION_NAMED
+  where ses_id = p_ses_id
+  and   cmp_id = p_cmp_id
+  ;
+
   update ABC_AUTH_SESSION
   set usr_id            = l_usr_id
   ,   ses_session_token = p_ses_session_token

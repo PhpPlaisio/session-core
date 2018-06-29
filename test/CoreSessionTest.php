@@ -7,6 +7,7 @@ use SetBased\Abc\Abc;
 use SetBased\Abc\C;
 use SetBased\Abc\CompanyResolver\UniCompanyResolver;
 use SetBased\Abc\Session\CoreSession;
+use SetBased\Abc\Session\Session;
 
 /**
  * Test cases for class CoreSession.
@@ -311,12 +312,108 @@ class CoreSessionTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Basic test with named sections.
+   */
+  public function testNamedSection1()
+  {
+    $session1 = new CoreSession();
+    $session1->start();
+
+    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_EXCLUSIVE);
+    self::assertNull($data);
+
+    $data = ['Hello', 'world'];
+
+    $token1 = $session1->getSessionToken();
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    $session2 = new CoreSession();
+    $session2->start();
+
+    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertEquals(['Hello', 'world'], $data);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Basic test with named sections read-only: data must not be saved.
+   */
+  public function testNamedSectionReadOnly1()
+  {
+    $session0 = new CoreSession();
+    $session0->start();
+
+    $data = &$session0->getNamedSection(__CLASS__, Session::SECTION_EXCLUSIVE);
+    self::assertNull($data);
+
+    $data = ['Hello', 'world'];
+
+    $token0 = $session0->getSessionToken();
+    $session0->save();
+
+    $_COOKIE['ses_session_token'] = $token0;
+
+    $session1 = new CoreSession();
+    $session1->start();
+
+    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertEquals(['Hello', 'world'], $data);
+
+    // Change the data.
+    $data = null;
+
+    $token1 = $session1->getSessionToken();
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    $session2 = new CoreSession();
+    $session2->start();
+
+    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertEquals(['Hello', 'world'], $data);
+  }
+
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Basic test with named sections read-only: data must not be saved or changes.
+   */
+  public function testNamedSectionReadOnly2()
+  {
+    $session1 = new CoreSession();
+    $session1->start();
+
+    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertNull($data);
+
+    $data = ['Hello', 'world'];
+
+    $token1 = $session1->getSessionToken();
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    $session2 = new CoreSession();
+    $session2->start();
+
+    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertNull($data);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Connects to the MySQL server and cleans the BLOB tables.
    */
   protected function setUp()
   {
     Abc::$DL->connect('localhost', 'test', 'test', 'test');
     Abc::$DL->begin();
+    Abc::$DL->executeNone('delete from ABC_AUTH_SESSION');
+    Abc::$DL->executeNone('delete from ABC_AUTH_SESSION_NAMED');
+    Abc::$DL->executeNone('delete from ABC_AUTH_SESSION_NAMED_LOCK');
     Abc::$babel->setLanguage(C::LAN_ID_EN);
   }
 

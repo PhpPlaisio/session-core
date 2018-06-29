@@ -10,7 +10,6 @@
     </target>
 
     <target name="unit-before">
-        <copy file="test/C.txt" tofile="test/C.php" overwrite="true" haltonerror="true"/>
         <symlink target="../../vendor/setbased/abc-babel-core/lib/psql/" link="lib/psql/abc-babel-core"/>
         <exec command="cat test/ddl/0010_create_database.sql                             | mysql -v -u root"      passthru="true" checkreturn="true"/>
         <exec command="cat test/ddl/0020_create_user.sql                                 | mysql -v -u root"      passthru="true" checkreturn="true"/>
@@ -26,7 +25,6 @@
         <exec command="cat test/ddl/0220_abc_babel_language.sql                          | mysql -v -u root test" passthru="true" checkreturn="true"/>
         <exec command="cat test/ddl/0230_abc_auth_user.sql                               | mysql -v -u root test" passthru="true" checkreturn="true"/>
         <exec command="bin/stratum stratum test/etc/stratum.cfg" passthru="true" checkreturn="true"/>
-        <copy file="test/C.php" tofile="test/C.txt" overwrite="true" haltonerror="true"/>
     </target>
 
     <!-- Runs all unit tests -->

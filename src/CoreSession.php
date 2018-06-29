@@ -3,6 +3,7 @@
 namespace SetBased\Abc\Session;
 
 use SetBased\Abc\Abc;
+use SetBased\Exception\FallenException;
 
 /**
  * A session handler that stores the session data in a database table.
@@ -25,6 +26,13 @@ class CoreSession implements Session
   public static $timeout = 1200;
 
   /**
+   * The named sections of this session.
+   *
+   * @var array
+   */
+  protected $sections = [];
+
+  /**
    * The session data.
    *
    * @var array
@@ -32,6 +40,7 @@ class CoreSession implements Session
   protected $session;
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Returns a secure random token that can be safely used for session IDs. The length of the token is 64 HEX
    * characters.
@@ -63,6 +72,54 @@ class CoreSession implements Session
   public function getLanId(): int
   {
     return $this->session['lan_id'];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns a reference to the data of a named section of the session.
+   *
+   * If the named section does not yet exists a reference to null is returned. Only named sessions opened in exclusive
+   * mode will be saved by @see save.
+   *
+   * @param string $name The name of the named section.
+   * @param int    $mode The mode for getting the named section.
+   *
+   * @return mixed
+   *
+   * @since 1.0.0
+   * @api
+   */
+  public function &getNamedSection(string $name, int $mode)
+  {
+    if (!isset($this->sections[$name]))
+    {
+      if ($this->session['ses_id']===null)
+      {
+        $section = null;
+      }
+      else
+      {
+        $section = Abc::$DL->abcAuthSessionNamedSectionGet(Abc::$companyResolver->getCmpId(),
+                                                           $this->session['ses_id'],
+                                                           $name,
+                                                           $mode);
+      }
+
+      if ($section===null)
+      {
+        $section = ['mode' => $mode,
+                    'data' => null];
+      }
+      else
+      {
+        $section = ['mode' => $mode,
+                    'data' => unserialize($section['ans_data'])];
+      }
+
+      $this->sections[$name] = $section;
+    }
+
+    return $this->sections[$name]['data'];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -176,6 +233,24 @@ class CoreSession implements Session
 
     $serial = (!empty($_SESSION)) ? serialize($_SESSION) : null;
     Abc::$DL->abcAuthSessionUpdateSession($this->session['cmp_id'], $this->session['ses_id'], $serial);
+
+    foreach ($this->sections as $name => $section)
+    {
+      switch ($section['mode'])
+      {
+        case Session::SECTION_EXCLUSIVE:
+        case Session::SECTION_SHARED:
+          $this->saveNamedSection($name, $section['data']);
+          break;
+
+        case Session::SECTION_READ_ONLY:
+          // Nothing to do.
+          break;
+
+        default:
+          throw new FallenException('mode', $section['mode']);
+      }
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -279,6 +354,37 @@ class CoreSession implements Session
     else
     {
       $_SESSION = [];
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Saves a named section of the session.
+   *
+   * Normally will return true. However, in NAMED_FIRST_COME_FIRST_SERVED mode will return false when the named section
+   * of the session could not be updated (due to some other request has updated the named section before).
+   *
+   * @param string $name  The name of the named section.
+   * @param mixed  $data  The value of the named section of the session. A null value will delete the named section
+   *                      of the session.
+   *
+   * @since 1.0.0
+   * @api
+   */
+  private function saveNamedSection(string $name, $data): void
+  {
+    if ($data===null)
+    {
+      Abc::$DL->abcAuthSessionNamedSectionDelete(Abc::$companyResolver->getCmpId(),
+                                                 $this->session['ses_id'],
+                                                 $name);
+    }
+    else
+    {
+      Abc::$DL->abcAuthSessionNamedSectionUpdate(Abc::$companyResolver->getCmpId(),
+                                                 $this->session['ses_id'],
+                                                 $name,
+                                                 serialize($data));
     }
   }
 

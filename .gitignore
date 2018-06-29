@@ -2,8 +2,6 @@
 /bin/
 /composer.lock
 /lib/psql/abc-babel-core
-/test/C.php
-/test/TestDataLayer.php
 /test/coverage.xml
 /test/etc/columns.txt
 /test/etc/routines.json
