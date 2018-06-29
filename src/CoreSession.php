@@ -1,8 +1,9 @@
 <?php
-//----------------------------------------------------------------------------------------------------------------------
+
 namespace SetBased\Abc\Session;
 
 use SetBased\Abc\Abc;
+use SetBased\Exception\FallenException;
 
 /**
  * A session handler that stores the session data in a database table.
@@ -10,13 +11,6 @@ use SetBased\Abc\Abc;
 class CoreSession implements Session
 {
   //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * The source for randomness.
-   *
-   * @var string
-   */
-  public static $entropyFile = '/dev/urandom';
-
   /**
    * The number of bytes the be read from the source of randomness.
    *
@@ -32,6 +26,13 @@ class CoreSession implements Session
   public static $timeout = 1200;
 
   /**
+   * The named sections of this session.
+   *
+   * @var array
+   */
+  protected $sections = [];
+
+  /**
    * The session data.
    *
    * @var array
@@ -39,32 +40,16 @@ class CoreSession implements Session
   protected $session;
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Returns a secure random token that can be safely used for session IDs. The length of the token is 64 HEX
    * characters.
    *
    * @return string
    */
-  private static function getRandomToken()
+  private static function getRandomToken(): string
   {
-    $handle = fopen(self::$entropyFile, 'rb');
-    $token  = hash('sha256', fread($handle, self::$entropyLength));
-    fclose($handle);
-
-    return $token;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns the ID of company of the current session.
-   *
-   * @return int
-   *
-   * @deprecated Use Abc::$companyResolver->getCmpId() instead.
-   */
-  public function getCmpId()
-  {
-    return $this->session['cmp_id'];
+    return hash('sha256', random_bytes(self::$entropyLength));
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -73,7 +58,7 @@ class CoreSession implements Session
    *
    * @return string
    */
-  public function getCsrfToken()
+  public function getCsrfToken(): string
   {
     return $this->session['ses_csrf_token'];
   }
@@ -84,9 +69,57 @@ class CoreSession implements Session
    *
    * @return int
    */
-  public function getLanId()
+  public function getLanId(): int
   {
     return $this->session['lan_id'];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns a reference to the data of a named section of the session.
+   *
+   * If the named section does not yet exists a reference to null is returned. Only named sessions opened in exclusive
+   * mode will be saved by @see save.
+   *
+   * @param string $name The name of the named section.
+   * @param int    $mode The mode for getting the named section.
+   *
+   * @return mixed
+   *
+   * @since 1.0.0
+   * @api
+   */
+  public function &getNamedSection(string $name, int $mode)
+  {
+    if (!isset($this->sections[$name]))
+    {
+      if ($this->session['ses_id']===null)
+      {
+        $section = null;
+      }
+      else
+      {
+        $section = Abc::$DL->abcAuthSessionNamedSectionGet(Abc::$companyResolver->getCmpId(),
+                                                           $this->session['ses_id'],
+                                                           $name,
+                                                           $mode);
+      }
+
+      if ($section===null)
+      {
+        $section = ['mode' => $mode,
+                    'data' => null];
+      }
+      else
+      {
+        $section = ['mode' => $mode,
+                    'data' => unserialize($section['ans_data'])];
+      }
+
+      $this->sections[$name] = $section;
+    }
+
+    return $this->sections[$name]['data'];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -95,7 +128,7 @@ class CoreSession implements Session
    *
    * @return int
    */
-  public function getProId()
+  public function getProId(): int
   {
     return $this->session['pro_id'];
   }
@@ -106,7 +139,7 @@ class CoreSession implements Session
    *
    * @return int|null
    */
-  public function getSesId()
+  public function getSesId(): ?int
   {
     return $this->session['ses_id'];
   }
@@ -117,7 +150,7 @@ class CoreSession implements Session
    *
    * @return string
    */
-  public function getSessionToken()
+  public function getSessionToken(): string
   {
     return $this->session['ses_session_token'];
   }
@@ -128,7 +161,7 @@ class CoreSession implements Session
    *
    * @return int
    */
-  public function getUsrId()
+  public function getUsrId(): int
   {
     return $this->session['usr_id'];
   }
@@ -139,9 +172,9 @@ class CoreSession implements Session
    *
    * @return bool
    */
-  public function isAnonymous()
+  public function isAnonymous(): bool
   {
-    return $this->session['usr_anonymous'];
+    return !empty($this->session['usr_anonymous']);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -150,7 +183,7 @@ class CoreSession implements Session
    *
    * @param int $usrId The ID the user.
    */
-  public function login($usrId)
+  public function login(int $usrId): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
@@ -172,7 +205,7 @@ class CoreSession implements Session
   /**
    * Terminates the current session.
    */
-  public function logout()
+  public function logout(): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
@@ -193,13 +226,31 @@ class CoreSession implements Session
   /**
    * Saves the current state of the session.
    */
-  public function save()
+  public function save(): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
 
     $serial = (!empty($_SESSION)) ? serialize($_SESSION) : null;
     Abc::$DL->abcAuthSessionUpdateSession($this->session['cmp_id'], $this->session['ses_id'], $serial);
+
+    foreach ($this->sections as $name => $section)
+    {
+      switch ($section['mode'])
+      {
+        case Session::SECTION_EXCLUSIVE:
+        case Session::SECTION_SHARED:
+          $this->saveNamedSection($name, $section['data']);
+          break;
+
+        case Session::SECTION_READ_ONLY:
+          // Nothing to do.
+          break;
+
+        default:
+          throw new FallenException('mode', $section['mode']);
+      }
+    }
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -208,7 +259,7 @@ class CoreSession implements Session
    *
    * @param int $lanId The ID of the language.
    */
-  public function setLanId($lanId)
+  public function setLanId(int $lanId): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
@@ -221,7 +272,7 @@ class CoreSession implements Session
   /**
    * Creates a session or resumes the current session based on the session cookie.
    */
-  public function start()
+  public function start(): void
   {
     $sesSessionToken = $_COOKIE['ses_session_token'] ?? null;
     if ($sesSessionToken===null)
@@ -264,7 +315,7 @@ class CoreSession implements Session
   /**
    * Sets the session and CSRF cookies.
    */
-  protected function setCookies()
+  protected function setCookies(): void
   {
     if (isset($_SERVER['HTTPS']))
     {
@@ -294,7 +345,7 @@ class CoreSession implements Session
   /**
    * Unpacks the session data and initializes $_SESSION.
    */
-  protected function unpackSession()
+  protected function unpackSession(): void
   {
     if ($this->session['ses_data']!==null)
     {
@@ -303,6 +354,37 @@ class CoreSession implements Session
     else
     {
       $_SESSION = [];
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Saves a named section of the session.
+   *
+   * Normally will return true. However, in NAMED_FIRST_COME_FIRST_SERVED mode will return false when the named section
+   * of the session could not be updated (due to some other request has updated the named section before).
+   *
+   * @param string $name  The name of the named section.
+   * @param mixed  $data  The value of the named section of the session. A null value will delete the named section
+   *                      of the session.
+   *
+   * @since 1.0.0
+   * @api
+   */
+  private function saveNamedSection(string $name, $data): void
+  {
+    if ($data===null)
+    {
+      Abc::$DL->abcAuthSessionNamedSectionDelete(Abc::$companyResolver->getCmpId(),
+                                                 $this->session['ses_id'],
+                                                 $name);
+    }
+    else
+    {
+      Abc::$DL->abcAuthSessionNamedSectionUpdate(Abc::$companyResolver->getCmpId(),
+                                                 $this->session['ses_id'],
+                                                 $name,
+                                                 serialize($data));
     }
   }
 

@@ -25,8 +25,8 @@ begin
   ,      p_ses_session_token
   ,      p_ses_csrf_token
   ,      unix_timestamp()
-  from       AUT_COMPANY  cmp
-  inner join AUT_USER     usr  on  usr.cmp_id = cmp.cmp_id
+  from       ABC_AUTH_COMPANY cmp
+  inner join ABC_AUTH_USER    usr  on  usr.cmp_id = cmp.cmp_id
   where cmp.cmp_id        = p_cmp_id
   and   usr.usr_anonymous = 1
   ;

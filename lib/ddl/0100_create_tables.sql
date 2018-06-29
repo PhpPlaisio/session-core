@@ -5,7 +5,7 @@
 /*  FileName : abc-session-core.ecm                                               */
 /*  Platform : MySQL 5.6                                                          */
 /*  Version  :                                                                    */
-/*  Date     : zaterdag 25 november 2017                                          */
+/*  Date     : vrijdag 29 juni 2018                                               */
 /*================================================================================*/
 /*================================================================================*/
 /* CREATE TABLES                                                                  */
@@ -21,6 +21,21 @@ CREATE TABLE ABC_AUTH_SESSION (
   ses_last_request BIGINT UNSIGNED NOT NULL,
   ses_data LONGBLOB,
   CONSTRAINT PK_ABC_AUTH_SESSION PRIMARY KEY (ses_id)
+);
+
+CREATE TABLE ABC_AUTH_SESSION_NAMED (
+  ses_id INT UNSIGNED NOT NULL,
+  cmp_id SMALLINT UNSIGNED NOT NULL,
+  ans_name VARCHAR(128) NOT NULL,
+  ans_data LONGBLOB,
+  CONSTRAINT PK_ABC_AUTH_SESSION_NAMED PRIMARY KEY (ses_id, ans_name)
+);
+
+CREATE TABLE ABC_AUTH_SESSION_NAMED_LOCK (
+  ses_id INT NOT NULL,
+  cmp_id SMALLINT UNSIGNED NOT NULL,
+  ans_name VARCHAR(128) NOT NULL,
+  CONSTRAINT PK_ABC_AUTH_SESSION_NAMED_LOCK PRIMARY KEY (ses_id, ans_name)
 );
 
 /*================================================================================*/

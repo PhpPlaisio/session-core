@@ -1,0 +1,19 @@
+/**
+ * Deletes a named section of a session.
+ *
+ * @param p_cmp_id   The ID of the company (safe guard).
+ * @param p_ses_id   The ID of the session.
+ * @param p_ans_name The name of the named section.
+ */
+create procedure abc_auth_session_named_section_delete(in p_cmp_id   @abc_auth_session_named.cmp_id%type@,
+                                                       in p_ses_id   @abc_auth_session_named.ses_id%type@,
+                                                       in p_ans_name @abc_auth_session_named.ans_name%type@)
+modifies sql data
+-- type: none
+begin
+  delete from ABC_AUTH_SESSION_NAMED
+  where cmp_id   = p_cmp_id
+  and   ses_id   = p_ses_id
+  and   ans_name = p_ans_name
+  ;
+end
