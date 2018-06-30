@@ -20,8 +20,8 @@ begin
     select ses_id
     into   l_ses_id
     from   ABC_AUTH_SESSION_NAMED_LOCK
-    where  cmp_id = p_cmp_id
-    and    ses_id   = p_ses_id
+    where  ses_id   = p_ses_id
+    and    cmp_id   = p_cmp_id
     and    ans_name = p_ans_name
     for update
     ;
@@ -30,8 +30,8 @@ begin
       insert into ABC_AUTH_SESSION_NAMED_LOCK( ses_id
       ,                                        cmp_id
       ,                                        ans_name )
-      values( p_cmp_id
-      ,       p_ses_id
+      values( p_ses_id
+      ,       p_cmp_id
       ,       p_ans_name )
       ;
     end if;
@@ -39,8 +39,8 @@ begin
 
   select ans_data
   from   ABC_AUTH_SESSION_NAMED
-  where  cmp_id   = p_cmp_id
-  and    ses_id   = p_ses_id
+  where  ses_id   = p_ses_id
+  and    cmp_id   = p_cmp_id
   and    ans_name = p_ans_name
   ;
 end
