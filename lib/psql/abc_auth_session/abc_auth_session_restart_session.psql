@@ -28,5 +28,15 @@ begin
   and   cmp.cmp_id = p_cmp_id
   ;
 
+  delete from ABC_AUTH_SESSION_NAMED_LOCK
+  where ses_id = p_ses_id
+  and   cmp_id = p_cmp_id
+  ;
+
+  delete from ABC_AUTH_SESSION_NAMED
+  where ses_id = p_ses_id
+  and   cmp_id = p_cmp_id
+  ;
+
   call abc_auth_session_get_session(p_cmp_id, p_ses_session_token);
 end
