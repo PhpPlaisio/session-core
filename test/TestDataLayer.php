@@ -69,6 +69,8 @@ class TestDataLayer extends DataLayer
    *                                 smallint(5) unsigned
    * @param int    $pSesId           The ID of the session.
    *                                 int(10) unsigned
+   * @param int    $pLanId           The ID of the language of the session.
+   *                                 tinyint(3) unsigned
    * @param string $pSesSessionToken The new session token.
    *                                 varchar(64) character set latin1 collation latin1_swedish_ci
    * @param string $pSesCsrfToken    The new CSRF token.
@@ -76,9 +78,9 @@ class TestDataLayer extends DataLayer
    *
    * @return array
    */
-  public function abcAuthSessionLogout(?int $pCmpId, ?int $pSesId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
+  public function abcAuthSessionLogout(?int $pCmpId, ?int $pSesId, ?int $pLanId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
   {
-    return $this->executeRow1('call abc_auth_session_logout('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteString($pSesSessionToken).','.$this->quoteString($pSesCsrfToken).')');
+    return $this->executeRow1('call abc_auth_session_logout('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteInt($pLanId).','.$this->quoteString($pSesSessionToken).','.$this->quoteString($pSesCsrfToken).')');
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -177,28 +179,6 @@ class TestDataLayer extends DataLayer
     if ($this->mysqli->more_results()) $this->mysqli->next_result();
 
     return $ret;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Restarts a session, i.e. all data stored in the session will be deleted.
-   *
-   * @param int    $pCmpId           The ID of the company of the user (safe guard).
-   *                                 smallint(5) unsigned
-   * @param int    $pSesId           The ID of the session.
-   *                                 int(10) unsigned
-   * @param int    $pLanId           The ID of the language of the session.
-   *                                 tinyint(3) unsigned
-   * @param string $pSesSessionToken The new session token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
-   * @param string $pSesCsrfToken    The new CSRF token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
-   *
-   * @return array
-   */
-  public function abcAuthSessionRestartSession(?int $pCmpId, ?int $pSesId, ?int $pLanId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
-  {
-    return $this->executeRow1('call abc_auth_session_restart_session('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteInt($pLanId).','.$this->quoteString($pSesSessionToken).','.$this->quoteString($pSesCsrfToken).')');
   }
 
   //--------------------------------------------------------------------------------------------------------------------

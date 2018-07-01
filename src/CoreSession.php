@@ -215,6 +215,7 @@ class CoreSession implements Session
 
     $this->session = Abc::$DL->abcAuthSessionLogout($this->session['cmp_id'],
                                                     $this->session['ses_id'],
+                                                    Abc::$languageResolver->getLanId(),
                                                     $this->session['ses_session_token'],
                                                     $this->session['ses_csrf_token']);
 
@@ -299,11 +300,11 @@ class CoreSession implements Session
       elseif (($this->session['ses_last_request'] + self::$timeout)<=time())
       {
         // Session has expired. Restart the session, i.e. delete all data stored in the session and use new tokens.
-        $this->session = Abc::$DL->abcAuthSessionRestartSession(Abc::$companyResolver->getCmpId(),
-                                                                $this->session['ses_id'],
-                                                                Abc::$languageResolver->getLanId(),
-                                                                self::getRandomToken(),
-                                                                self::getRandomToken());
+        $this->session = Abc::$DL->abcAuthSessionLogout($this->session['cmp_id'],
+                                                        $this->session['ses_id'],
+                                                        Abc::$languageResolver->getLanId(),
+                                                        self::getRandomToken(),
+                                                        self::getRandomToken());
       }
     }
 
