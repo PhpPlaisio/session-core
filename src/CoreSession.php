@@ -188,14 +188,11 @@ class CoreSession implements Session
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
 
-    $this->session['ses_session_token'] = self::getRandomToken();
-    $this->session['ses_csrf_token']    = self::getRandomToken();
-
     $this->session = Abc::$DL->abcAuthSessionLogin($this->session['cmp_id'],
                                                    $this->session['ses_id'],
                                                    $usrId,
-                                                   $this->session['ses_session_token'],
-                                                   $this->session['ses_csrf_token']);
+                                                   self::getRandomToken(),
+                                                   self::getRandomToken());
 
     $this->unpackSession();
     $this->setCookies();
@@ -210,14 +207,11 @@ class CoreSession implements Session
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
 
-    $this->session['ses_session_token'] = self::getRandomToken();
-    $this->session['ses_csrf_token']    = self::getRandomToken();
-
     $this->session = Abc::$DL->abcAuthSessionLogout($this->session['cmp_id'],
                                                     $this->session['ses_id'],
                                                     Abc::$languageResolver->getLanId(),
-                                                    $this->session['ses_session_token'],
-                                                    $this->session['ses_csrf_token']);
+                                                    self::getRandomToken(),
+                                                    self::getRandomToken());
 
     $this->unpackSession();
     $this->setCookies();
