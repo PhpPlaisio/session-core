@@ -40,7 +40,6 @@ class CoreSession implements Session
   protected $session;
 
   //--------------------------------------------------------------------------------------------------------------------
-
   /**
    * Returns a secure random token that can be safely used for session IDs. The length of the token is 64 HEX
    * characters.
