@@ -24,11 +24,22 @@ begin
   and    cmp_id = p_cmp_id
   ;
 
+  delete from ABC_AUTH_SESSION_NAMED_LOCK
+  where ses_id = p_ses_id
+  and   cmp_id = p_cmp_id
+  ;
+
+  delete from ABC_AUTH_SESSION_NAMED
+  where ses_id = p_ses_id
+  and   cmp_id = p_cmp_id
+  ;
+
   update ABC_AUTH_SESSION
   set lan_id            = l_lan_id
   ,   usr_id            = p_usr_id
   ,   ses_session_token = p_ses_session_token
   ,   ses_csrf_token    = p_ses_csrf_token
+  ,   ses_data          = null
   where ses_id = p_ses_id
   and   cmp_id = p_cmp_id
   ;
