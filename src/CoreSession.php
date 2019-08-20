@@ -319,7 +319,7 @@ class CoreSession implements Session
       // Set session cookie.
       setcookie('ses_session_token',
                 $this->session['ses_session_token'],
-                false,
+                0,
                 '/',
                 $domain,
                 true,
@@ -328,7 +328,7 @@ class CoreSession implements Session
       // Set CSRF cookie.
       setcookie('ses_csrf_token',
                 $this->session['ses_csrf_token'],
-                false,
+                0,
                 '/',
                 $domain,
                 true,
