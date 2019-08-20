@@ -24,11 +24,10 @@ class CoreSessionTest extends TestCase
   private static $abc;
 
   //--------------------------------------------------------------------------------------------------------------------
-
   /**
    * Creates the concrete implementation of the ABC TestAbc.
    */
-  public static function setUpBeforeClass()
+  public static function setUpBeforeClass(): void
   {
     parent::setUpBeforeClass();
 
@@ -39,7 +38,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test an expired anonymous session will be replaced with new session.
    */
-  public function testExpiredSession1()
+  public function testExpiredSession1(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -66,7 +65,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test an expired logged in session will be replaced with new session.
    */
-  public function testExpiredSession2()
+  public function testExpiredSession2(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -99,7 +98,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test method getCsrfToken().
    */
-  public function testGetCsrfToken()
+  public function testGetCsrfToken(): void
   {
     unset($_COOKIE['ses_session_token']);
 
@@ -115,7 +114,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test method getProId().
    */
-  public function testGetProId()
+  public function testGetProId(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -130,7 +129,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test login destroys all previous session data and generates new session token.
    */
-  public function testLogin01()
+  public function testLogin01(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -153,7 +152,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test logout destroys all previous session data.
    */
-  public function testLogout01()
+  public function testLogout01(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -193,7 +192,7 @@ class CoreSessionTest extends TestCase
   /**
    * Tests for method setLanId().
    */
-  public function testSetLanId()
+  public function testSetLanId(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -218,7 +217,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test start session with empty session token.
    */
-  public function testStart01()
+  public function testStart01(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -246,7 +245,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test start session with non-empty session token.
    */
-  public function testStart03()
+  public function testStart03(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -269,7 +268,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test start session with unknown session token.
    */
-  public function testStart04()
+  public function testStart04(): void
   {
     $_COOKIE['ses_session_token'] = 'not-a-known-session-token';
 
@@ -284,7 +283,7 @@ class CoreSessionTest extends TestCase
   /**
    * Test start session ith known session token from other company.
    */
-  public function testStart05()
+  public function testStart05(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
@@ -315,7 +314,7 @@ class CoreSessionTest extends TestCase
   /**
    * Basic test with named sections.
    */
-  public function testNamedSection1()
+  public function testNamedSection1(): void
   {
     $session1 = new CoreSession();
     $session1->start();
@@ -341,7 +340,7 @@ class CoreSessionTest extends TestCase
   /**
    * Basic test with named sections read-only: data must not be saved.
    */
-  public function testNamedSectionReadOnly1()
+  public function testNamedSectionReadOnly1(): void
   {
     $session0 = new CoreSession();
     $session0->start();
@@ -382,7 +381,7 @@ class CoreSessionTest extends TestCase
   /**
    * Basic test with named sections read-only: data must not be saved or changes.
    */
-  public function testNamedSectionReadOnly2()
+  public function testNamedSectionReadOnly2(): void
   {
     $session1 = new CoreSession();
     $session1->start();
@@ -408,7 +407,7 @@ class CoreSessionTest extends TestCase
   /**
    * Connects to the MySQL server and cleans the BLOB tables.
    */
-  protected function setUp()
+  protected function setUp(): void
   {
     Abc::$DL->connect('localhost', 'test', 'test', 'test');
     Abc::$DL->begin();
@@ -422,7 +421,7 @@ class CoreSessionTest extends TestCase
   /**
    * Disconnects from the MySQL server.
    */
-  protected function tearDown()
+  protected function tearDown(): void
   {
     Abc::$DL->commit();
     Abc::$DL->disconnect();

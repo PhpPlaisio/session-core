@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace SetBased\Abc\Session\Test;
 
@@ -13,8 +14,8 @@ class TestDataLayer extends DataLayer
   /**
    * Gets session data for an anonymous user.
    *
-   * @param int $pCmpId The ID of the company.
-   *                    smallint(5) unsigned
+   * @param int|null $pCmpId The ID of the company.
+   *                         smallint(5) unsigned
    *
    * @return array
    */
@@ -27,10 +28,10 @@ class TestDataLayer extends DataLayer
   /**
    * Gets a session based a session token.
    *
-   * @param int    $pCmpId           The ID of the company of the user (safe guard).
-   *                                 smallint(5) unsigned
-   * @param string $pSesSessionToken The session token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
+   * @param int|null    $pCmpId           The ID of the company of the user (safe guard).
+   *                                      smallint(5) unsigned
+   * @param string|null $pSesSessionToken The session token.
+   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
    *
    * @return array|null
    */
@@ -43,16 +44,16 @@ class TestDataLayer extends DataLayer
   /**
    * Marks a user as successfully logged in in the current session.
    *
-   * @param int    $pCmpId           The ID of the company (safe guard).
-   *                                 smallint(5) unsigned
-   * @param int    $pSesId           The ID of the session.
-   *                                 int(10) unsigned
-   * @param int    $pUsrId           The ID of the user.
-   *                                 int(10) unsigned
-   * @param string $pSesSessionToken The new session token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
-   * @param string $pSesCsrfToken    The new CSRF token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
+   * @param int|null    $pCmpId           The ID of the company (safe guard).
+   *                                      smallint(5) unsigned
+   * @param int|null    $pSesId           The ID of the session.
+   *                                      int(10) unsigned
+   * @param int|null    $pUsrId           The ID of the user.
+   *                                      int(10) unsigned
+   * @param string|null $pSesSessionToken The new session token.
+   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   * @param string|null $pSesCsrfToken    The new CSRF token.
+   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
    *
    * @return array
    */
@@ -65,16 +66,16 @@ class TestDataLayer extends DataLayer
   /**
    * Logs the current user out of the current session.
    *
-   * @param int    $pCmpId           The ID of the company (safe guard).
-   *                                 smallint(5) unsigned
-   * @param int    $pSesId           The ID of the session.
-   *                                 int(10) unsigned
-   * @param int    $pLanId           The ID of the language of the session.
-   *                                 tinyint(3) unsigned
-   * @param string $pSesSessionToken The new session token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
-   * @param string $pSesCsrfToken    The new CSRF token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
+   * @param int|null    $pCmpId           The ID of the company (safe guard).
+   *                                      smallint(5) unsigned
+   * @param int|null    $pSesId           The ID of the session.
+   *                                      int(10) unsigned
+   * @param int|null    $pLanId           The ID of the language of the session.
+   *                                      tinyint(3) unsigned
+   * @param string|null $pSesSessionToken The new session token.
+   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   * @param string|null $pSesCsrfToken    The new CSRF token.
+   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
    *
    * @return array
    */
@@ -87,12 +88,12 @@ class TestDataLayer extends DataLayer
   /**
    * Deletes a named section of a session.
    *
-   * @param int    $pCmpId   The ID of the company (safe guard).
-   *                         smallint(5) unsigned
-   * @param int    $pSesId   The ID of the session.
-   *                         int(10) unsigned
-   * @param string $pAnsName The name of the named section.
-   *                         varchar(128) character set latin1 collation latin1_swedish_ci
+   * @param int|null    $pCmpId   The ID of the company (safe guard).
+   *                              smallint(5) unsigned
+   * @param int|null    $pSesId   The ID of the session.
+   *                              int(10) unsigned
+   * @param string|null $pAnsName The name of the named section.
+   *                              varchar(128) character set latin1 collation latin1_swedish_ci
    *
    * @return int
    */
@@ -105,14 +106,14 @@ class TestDataLayer extends DataLayer
   /**
    * Selects a named section of a session.
    *
-   * @param int    $pCmpId   The ID of the company (safe guard).
-   *                         smallint(5) unsigned
-   * @param int    $pSesId   The ID of the session.
-   *                         int(10) unsigned
-   * @param string $pAnsName The name of the named section.
-   *                         varchar(128) character set latin1 collation latin1_swedish_ci
-   * @param int    $pMode    The lock mode for getting the named section.
-   *                         int(11)
+   * @param int|null    $pCmpId   The ID of the company (safe guard).
+   *                              smallint(5) unsigned
+   * @param int|null    $pSesId   The ID of the session.
+   *                              int(10) unsigned
+   * @param string|null $pAnsName The name of the named section.
+   *                              varchar(128) character set latin1 collation latin1_swedish_ci
+   * @param int|null    $pMode    The lock mode for getting the named section.
+   *                              int(11)
    *
    * @return array|null
    */
@@ -125,14 +126,14 @@ class TestDataLayer extends DataLayer
   /**
    * Updates a named section of a session.
    *
-   * @param int    $pCmpId   The ID of the company.
-   *                         smallint(5) unsigned
-   * @param int    $pSesId   The ID of the session.
-   *                         int(10) unsigned
-   * @param string $pAnsName The name of the named section.
-   *                         varchar(128) character set latin1 collation latin1_swedish_ci
-   * @param string $pAnsData The data of the named section.
-   *                         longblob
+   * @param int|null    $pCmpId   The ID of the company.
+   *                              smallint(5) unsigned
+   * @param int|null    $pSesId   The ID of the session.
+   *                              int(10) unsigned
+   * @param string|null $pAnsName The name of the named section.
+   *                              varchar(128) character set latin1 collation latin1_swedish_ci
+   * @param string|null $pAnsData The data of the named section.
+   *                              longblob
    *
    * @return int
    */
@@ -140,37 +141,30 @@ class TestDataLayer extends DataLayer
   {
     $query = 'call abc_auth_session_named_section_update('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteString($pAnsName).',?)';
     $stmt  = $this->mysqli->prepare($query);
-    if (!$stmt) $this->mySqlError('mysqli::prepare');
+    if (!$stmt) $this->dataLayerError('mysqli::prepare');
 
     $null = null;
     $b = $stmt->bind_param('b', $null);
-    if (!$b) $this->mySqlError('mysqli_stmt::bind_param');
+    if (!$b) $this->dataLayerError('mysqli_stmt::bind_param');
 
     $this->getMaxAllowedPacket();
 
-    $n = strlen($pAnsData);
-    $p = 0;
-    while ($p<$n)
-    {
-      $b = $stmt->send_long_data(0, substr($pAnsData, $p, $this->chunkSize));
-      if (!$b) $this->mySqlError('mysqli_stmt::send_long_data');
-      $p += $this->chunkSize;
-    }
+    $this->sendLongData($stmt, 0, $pAnsData);
 
     if ($this->logQueries)
     {
       $time0 = microtime(true);
 
       $b = $stmt->execute();
-      if (!$b) $this->mySqlError('mysqli_stmt::execute');
+      if (!$b) $this->queryError('mysqli_stmt::execute', $query);
 
       $this->queryLog[] = ['query' => $query,
-      'time'  => microtime(true) - $time0];
+                           'time'  => microtime(true) - $time0];
     }
     else
     {
       $b = $stmt->execute();
-      if (!$b) $this->mySqlError('mysqli_stmt::execute');
+      if (!$b) $this->queryError('mysqli_stmt::execute', $query);
     }
 
     $ret = $this->mysqli->affected_rows;
@@ -185,14 +179,14 @@ class TestDataLayer extends DataLayer
   /**
    * Starts a new session.
    *
-   * @param int    $pCmpId           The ID of the company of the user (safe guard).
-   *                                 smallint(5) unsigned
-   * @param int    $pLanId           The ID of the language of the session.
-   *                                 tinyint(3) unsigned
-   * @param string $pSesSessionToken The session token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
-   * @param string $pSesCsrfToken    The CSRF token.
-   *                                 varchar(64) character set latin1 collation latin1_swedish_ci
+   * @param int|null    $pCmpId           The ID of the company of the user (safe guard).
+   *                                      smallint(5) unsigned
+   * @param int|null    $pLanId           The ID of the language of the session.
+   *                                      tinyint(3) unsigned
+   * @param string|null $pSesSessionToken The session token.
+   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   * @param string|null $pSesCsrfToken    The CSRF token.
+   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
    *
    * @return array
    */
@@ -205,12 +199,12 @@ class TestDataLayer extends DataLayer
   /**
    * Updates the language of a session.
    *
-   * @param int $pCmpId The ID of the company (safe guard).
-   *                    smallint(5) unsigned
-   * @param int $pSesId The ID of the session.
-   *                    int(10) unsigned
-   * @param int $pLanId The ID of the new language.
-   *                    tinyint(3) unsigned
+   * @param int|null $pCmpId The ID of the company (safe guard).
+   *                         smallint(5) unsigned
+   * @param int|null $pSesId The ID of the session.
+   *                         int(10) unsigned
+   * @param int|null $pLanId The ID of the new language.
+   *                         tinyint(3) unsigned
    *
    * @return int
    */
@@ -223,12 +217,12 @@ class TestDataLayer extends DataLayer
   /**
    * Updates a session.
    *
-   * @param int    $pCmpId   The ID of the company (safe guard).
-   *                         smallint(5) unsigned
-   * @param int    $pSesId   The ID of the session.
-   *                         int(10) unsigned
-   * @param string $pSesData The new additional data of the session.
-   *                         longblob
+   * @param int|null    $pCmpId   The ID of the company (safe guard).
+   *                              smallint(5) unsigned
+   * @param int|null    $pSesId   The ID of the session.
+   *                              int(10) unsigned
+   * @param string|null $pSesData The new additional data of the session.
+   *                              longblob
    *
    * @return int
    */
@@ -236,37 +230,30 @@ class TestDataLayer extends DataLayer
   {
     $query = 'call abc_auth_session_update_session('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).',?)';
     $stmt  = $this->mysqli->prepare($query);
-    if (!$stmt) $this->mySqlError('mysqli::prepare');
+    if (!$stmt) $this->dataLayerError('mysqli::prepare');
 
     $null = null;
     $b = $stmt->bind_param('b', $null);
-    if (!$b) $this->mySqlError('mysqli_stmt::bind_param');
+    if (!$b) $this->dataLayerError('mysqli_stmt::bind_param');
 
     $this->getMaxAllowedPacket();
 
-    $n = strlen($pSesData);
-    $p = 0;
-    while ($p<$n)
-    {
-      $b = $stmt->send_long_data(0, substr($pSesData, $p, $this->chunkSize));
-      if (!$b) $this->mySqlError('mysqli_stmt::send_long_data');
-      $p += $this->chunkSize;
-    }
+    $this->sendLongData($stmt, 0, $pSesData);
 
     if ($this->logQueries)
     {
       $time0 = microtime(true);
 
       $b = $stmt->execute();
-      if (!$b) $this->mySqlError('mysqli_stmt::execute');
+      if (!$b) $this->queryError('mysqli_stmt::execute', $query);
 
       $this->queryLog[] = ['query' => $query,
-      'time'  => microtime(true) - $time0];
+                           'time'  => microtime(true) - $time0];
     }
     else
     {
       $b = $stmt->execute();
-      if (!$b) $this->mySqlError('mysqli_stmt::execute');
+      if (!$b) $this->queryError('mysqli_stmt::execute', $query);
     }
 
     $ret = $this->mysqli->affected_rows;
@@ -298,8 +285,8 @@ class TestDataLayer extends DataLayer
   /**
    * Selects the details of a language.
    *
-   * @param int $pLanId The ID of the language.
-   *                    tinyint(3) unsigned
+   * @param int|null $pLanId The ID of the language.
+   *                         tinyint(3) unsigned
    *
    * @return array
    */
@@ -312,10 +299,10 @@ class TestDataLayer extends DataLayer
   /**
    * Selects the value of a text in a language.
    *
-   * @param int $pTxtId The ID of the text.
-   *                    smallint(5) unsigned
-   * @param int $pLanId The ID of the language.
-   *                    tinyint(3) unsigned
+   * @param int|null $pTxtId The ID of the text.
+   *                         smallint(5) unsigned
+   * @param int|null $pLanId The ID of the language.
+   *                         tinyint(3) unsigned
    *
    * @return string
    */
@@ -328,10 +315,10 @@ class TestDataLayer extends DataLayer
   /**
    * Selects the value of a word in a language.
    *
-   * @param int $pWrdId The ID of the word.
-   *                    smallint(5) unsigned
-   * @param int $pLanId The ID of the language.
-   *                    tinyint(3) unsigned
+   * @param int|null $pWrdId The ID of the word.
+   *                         smallint(5) unsigned
+   * @param int|null $pLanId The ID of the language.
+   *                         tinyint(3) unsigned
    *
    * @return string
    */

@@ -15,14 +15,15 @@
   },
   "require-dev": {
     "phing/phing": "^2.0.0",
-    "phpunit/phpunit": "^6.0.0",
+    "phpunit/phpunit": "^7.0.0 || ^8.0.0",
     "setbased/abc-babel-core": "*",
     "setbased/abc-company": "^1.1.0",
     "setbased/abc-company-resolver-uni": "^2.0.0",
     "setbased/abc-language-resolver-core": "^3.0.0",
     "setbased/abc-profile": "^1.1.0",
     "setbased/abc-user": "^1.1.0",
-    "setbased/php-stratum": "*"
+    "setbased/php-stratum": "^4.0.0",
+    "setbased/php-stratum-mysql": "^4.0.0"
   },
   "autoload": {
     "psr-4": {
