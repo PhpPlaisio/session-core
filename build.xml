@@ -1,4 +1,4 @@
-<project name="ABC-TestAbc: Core Session" default="build" basedir=".">
+<project name="ABC-TestNub: Core Session" default="build" basedir=".">
     <!-- Run composer update and executes various other updates -->
     <target name="update">
         <exec command="composer update" checkreturn="true" passthru="true"/>
@@ -10,13 +10,13 @@
     </target>
 
     <target name="unit-before">
-        <symlink target="../../vendor/setbased/abc-babel-core/lib/psql/" link="lib/psql/abc-babel-core"/>
+        <symlink target="../../vendor/plaisio/babel-core/lib/psql/" link="lib/psql/babel-core"/>
         <exec command="cat test/ddl/0010_create_database.sql                             | mysql -v -u root"      passthru="true" checkreturn="true"/>
         <exec command="cat test/ddl/0020_create_user.sql                                 | mysql -v -u root"      passthru="true" checkreturn="true"/>
-        <exec command="cat vendor/setbased/abc-company/lib/ddl/0100_create_tables.sql    | mysql -v -u root test" passthru="true" checkreturn="true"/>
-        <exec command="cat vendor/setbased/abc-profile/lib/ddl/0100_create_tables.sql    | mysql -v -u root test" passthru="true" checkreturn="true"/>
-        <exec command="cat vendor/setbased/abc-babel-core/lib/ddl/0100_create_tables.sql | mysql -v -u root test" passthru="true" checkreturn="true"/>
-        <exec command="cat vendor/setbased/abc-user/lib/ddl/0100_create_tables.sql       | mysql -v -u root test" passthru="true" checkreturn="true"/>
+        <exec command="cat vendor/plaisio/db-company/lib/ddl/0100_create_tables.sql      | mysql -v -u root test" passthru="true" checkreturn="true"/>
+        <exec command="cat vendor/plaisio/db-profile/lib/ddl/0100_create_tables.sql      | mysql -v -u root test" passthru="true" checkreturn="true"/>
+        <exec command="cat vendor/plaisio/babel-core/lib/ddl/0100_create_tables.sql      | mysql -v -u root test" passthru="true" checkreturn="true"/>
+        <exec command="cat vendor/plaisio/db-user/lib/ddl/0100_create_tables.sql         | mysql -v -u root test" passthru="true" checkreturn="true"/>
         <exec command="cat lib/ddl/0100_create_tables.sql                                | mysql -v -u root test" passthru="true" checkreturn="true"/>
         <exec command="cat test/ddl/0200_abc_auth_company.sql                            | mysql -v -u root test" passthru="true" checkreturn="true"/>
         <exec command="cat test/ddl/0200_abc_babel_word_group.sql                        | mysql -v -u root test" passthru="true" checkreturn="true"/>

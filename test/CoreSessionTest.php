@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Session\Test;
+namespace Plaisio\Session\Test;
 
 use PHPUnit\Framework\TestCase;
-use SetBased\Abc\Abc;
-use SetBased\Abc\C;
-use SetBased\Abc\CompanyResolver\UniCompanyResolver;
-use SetBased\Abc\Session\CoreSession;
-use SetBased\Abc\Session\Session;
+use Plaisio\C;
+use Plaisio\CompanyResolver\UniCompanyResolver;
+use Plaisio\Kernel\Nub;
+use Plaisio\Session\CoreSession;
+use Plaisio\Session\Session;
 
 /**
  * Test cases for class CoreSession.
@@ -17,21 +17,21 @@ class CoreSessionTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Our concrete instance of Abc.
+   * Our concrete instance of Nub.
    *
-   * @var Abc
+   * @var Nub
    */
-  private static $abc;
+  private static $nub;
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Creates the concrete implementation of the ABC TestAbc.
+   * Creates the concrete implementation of the ABC TestNub.
    */
   public static function setUpBeforeClass(): void
   {
     parent::setUpBeforeClass();
 
-    self::$abc = new TestAbc();
+    self::$nub = new TestNub();
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -291,10 +291,10 @@ class CoreSessionTest extends TestCase
     $session1->start();
     $token1 = $session1->getSessionToken();
     $sesId1 = $session1->getSesId();
-    $cmpId1 = Abc::$companyResolver->getCmpId();
+    $cmpId1 = Nub::$companyResolver->getCmpId();
     $session1->save();
 
-    Abc::$companyResolver = new UniCompanyResolver(C::CMP_ID_SYS);
+    Nub::$companyResolver = new UniCompanyResolver(C::CMP_ID_SYS);
 
     $_COOKIE['ses_session_token'] = $token1;
 
@@ -302,7 +302,7 @@ class CoreSessionTest extends TestCase
     $session2->start();
     $token2 = $session2->getSessionToken();
     $sesId2 = $session2->getSesId();
-    $cmpId2 = Abc::$companyResolver->getCmpId();
+    $cmpId2 = Nub::$companyResolver->getCmpId();
     $session2->save();
 
     self::assertNotEquals($cmpId1, $cmpId2);
@@ -409,12 +409,12 @@ class CoreSessionTest extends TestCase
    */
   protected function setUp(): void
   {
-    Abc::$DL->connect('localhost', 'test', 'test', 'test');
-    Abc::$DL->begin();
-    Abc::$DL->executeNone('delete from ABC_AUTH_SESSION');
-    Abc::$DL->executeNone('delete from ABC_AUTH_SESSION_NAMED');
-    Abc::$DL->executeNone('delete from ABC_AUTH_SESSION_NAMED_LOCK');
-    Abc::$babel->setLanguage(C::LAN_ID_EN);
+    Nub::$DL->connect('localhost', 'test', 'test', 'test');
+    Nub::$DL->begin();
+    Nub::$DL->executeNone('delete from ABC_AUTH_SESSION');
+    Nub::$DL->executeNone('delete from ABC_AUTH_SESSION_NAMED');
+    Nub::$DL->executeNone('delete from ABC_AUTH_SESSION_NAMED_LOCK');
+    Nub::$babel->setLanguage(C::LAN_ID_EN);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -423,8 +423,8 @@ class CoreSessionTest extends TestCase
    */
   protected function tearDown(): void
   {
-    Abc::$DL->commit();
-    Abc::$DL->disconnect();
+    Nub::$DL->commit();
+    Nub::$DL->disconnect();
   }
 
   //--------------------------------------------------------------------------------------------------------------------

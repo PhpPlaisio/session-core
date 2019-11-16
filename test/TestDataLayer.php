@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Session\Test;
+namespace Plaisio\Session\Test;
 
-use SetBased\Stratum\MySql\DataLayer;
+use \SetBased\Stratum\MySql\DataLayer;
 
 /**
  * The data layer.

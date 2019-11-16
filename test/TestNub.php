@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace SetBased\Abc\Session\Test;
+namespace Plaisio\Session\Test;
 
-use SetBased\Abc\Abc;
-use SetBased\Abc\Babel\CoreBabel;
-use SetBased\Abc\C;
-use SetBased\Abc\CompanyResolver\UniCompanyResolver;
-use SetBased\Abc\LanguageResolver\CoreLanguageResolver;
+use Plaisio\Babel\CoreBabel;
+use Plaisio\C;
+use Plaisio\CompanyResolver\UniCompanyResolver;
+use Plaisio\Kernel\Nub;
+use Plaisio\LanguageResolver\CoreLanguageResolver;
 
 /**
  * Mock framework for testing purposes.
  */
-class TestAbc extends Abc
+class TestNub extends Nub
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**

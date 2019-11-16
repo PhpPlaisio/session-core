@@ -1,8 +1,8 @@
 {
-  "name": "setbased/abc-session-core",
-  "description": "ABC-Framework: Core Session",
+  "name": "plaisio/session-core",
+  "description": "PhpPlaisio: Core Session",
   "keywords": [
-    "ABC-Framework",
+    "PhpPlaisio",
     "Session",
     "Core"
   ],
@@ -10,29 +10,30 @@
   "license": "MIT",
   "require": {
     "php": ">=7.1.0",
-    "setbased/abc": "*",
-    "setbased/abc-session": "*"
+    "plaisio/kernel": "^1.0.0",
+    "plaisio/session": "^1.0.0"
   },
   "require-dev": {
+    "ext-mysqli": "*",
     "phing/phing": "^2.0.0",
     "phpunit/phpunit": "^7.0.0 || ^8.0.0",
-    "setbased/abc-babel-core": "*",
-    "setbased/abc-company": "^1.1.0",
-    "setbased/abc-company-resolver-uni": "^2.0.0",
-    "setbased/abc-language-resolver-core": "^3.0.0",
-    "setbased/abc-profile": "^1.1.0",
-    "setbased/abc-user": "^1.1.0",
-    "setbased/php-stratum": "^4.0.0",
+    "plaisio/babel-core": "^1.0.0",
+    "plaisio/db-company": "^1.0.0",
+    "plaisio/company-resolver-uni": "^1.0.0",
+    "plaisio/language-resolver-core": "^1.0.0",
+    "plaisio/db-profile": "^1.0.0",
+    "plaisio/db-user": "^1.0.0",
+    "setbased/php-stratum": "^5.0.0",
     "setbased/php-stratum-mysql": "^4.0.0"
   },
   "autoload": {
     "psr-4": {
-      "SetBased\\Abc\\Session\\": "src/"
+      "Plaisio\\Session\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "SetBased\\Abc\\Session\\Test\\": "test/"
+      "Plaisio\\Session\\Test\\": "test/"
     },
     "classmap": [
       "test/C.php"
