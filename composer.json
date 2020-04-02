@@ -10,19 +10,19 @@
   "license": "MIT",
   "require": {
     "php": ">=7.3",
-    "plaisio/kernel": "^1.0",
-    "plaisio/session": "^1.0"
+    "plaisio/kernel": "^1.1",
+    "plaisio/session": "^1.1"
   },
   "require-dev": {
     "ext-mysqli": "*",
     "phing/phing": "^2.0",
     "phpunit/phpunit": "^9.0",
-    "plaisio/babel-core": "^1.0",
-    "plaisio/db-company": "^1.0",
-    "plaisio/company-resolver-uni": "^1.0",
-    "plaisio/language-resolver-core": "^1.0",
-    "plaisio/db-profile": "^1.0",
-    "plaisio/db-user": "^1.0",
+    "plaisio/babel-core": "^1.1",
+    "plaisio/db-company": "^1.1",
+    "plaisio/company-resolver-uni": "^1.1",
+    "plaisio/language-resolver-core": "^1.1",
+    "plaisio/db-profile": "^1.1",
+    "plaisio/db-user": "^1.1",
     "setbased/php-stratum": "^5.4",
     "setbased/php-stratum-mysql": "^4.4"
   },
