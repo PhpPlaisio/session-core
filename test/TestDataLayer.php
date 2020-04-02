@@ -31,7 +31,7 @@ class TestDataLayer extends DataLayer
    * @param int|null    $pCmpId           The ID of the company of the user (safe guard).
    *                                      smallint(5) unsigned
    * @param string|null $pSesSessionToken The session token.
-   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   *                                      varchar(64) character set ascii collation ascii_general_ci
    *
    * @return array|null
    */
@@ -51,9 +51,9 @@ class TestDataLayer extends DataLayer
    * @param int|null    $pUsrId           The ID of the user.
    *                                      int(10) unsigned
    * @param string|null $pSesSessionToken The new session token.
-   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   *                                      varchar(64) character set ascii collation ascii_general_ci
    * @param string|null $pSesCsrfToken    The new CSRF token.
-   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   *                                      varchar(64) character set ascii collation ascii_general_ci
    *
    * @return array
    */
@@ -73,9 +73,9 @@ class TestDataLayer extends DataLayer
    * @param int|null    $pLanId           The ID of the language of the session.
    *                                      tinyint(3) unsigned
    * @param string|null $pSesSessionToken The new session token.
-   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   *                                      varchar(64) character set ascii collation ascii_general_ci
    * @param string|null $pSesCsrfToken    The new CSRF token.
-   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   *                                      varchar(64) character set ascii collation ascii_general_ci
    *
    * @return array
    */
@@ -184,9 +184,9 @@ class TestDataLayer extends DataLayer
    * @param int|null    $pLanId           The ID of the language of the session.
    *                                      tinyint(3) unsigned
    * @param string|null $pSesSessionToken The session token.
-   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   *                                      varchar(64) character set ascii collation ascii_general_ci
    * @param string|null $pSesCsrfToken    The CSRF token.
-   *                                      varchar(64) character set latin1 collation latin1_swedish_ci
+   *                                      varchar(64) character set ascii collation ascii_general_ci
    *
    * @return array
    */
