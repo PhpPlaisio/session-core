@@ -89,6 +89,42 @@ class TestDataLayer extends MySqlDataLayer
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Deletes all sessions of a user.
+   *
+   * @param int|null $pCmpId The ID of the company (safeguard).
+   *                         smallint(5) unsigned
+   * @param int|null $pUsrId The ID of the user.
+   *                         int(10) unsigned
+   *
+   * @return int
+   *
+   * @throws MySqlQueryErrorException;
+   */
+  public function abcSessionCoreDestroyAllSessionsOfUser(?int $pCmpId, ?int $pUsrId): int
+  {
+    return $this->executeNone('call abc_session_core_destroy_all_sessions_of_user('.$this->quoteInt($pCmpId).','.$this->quoteInt($pUsrId).')');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Deletes all other sessions of the user of a session.
+   *
+   * @param int|null $pCmpId The ID of the company (safeguard).
+   *                         smallint(5) unsigned
+   * @param int|null $pSesId The ID of the session.
+   *                         int(10) unsigned
+   *
+   * @return int
+   *
+   * @throws MySqlQueryErrorException;
+   */
+  public function abcSessionCoreDestroyOtherSessionsOfUser(?int $pCmpId, ?int $pSesId): int
+  {
+    return $this->executeNone('call abc_session_core_destroy_other_sessions_of_user('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).')');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Gets session data for an anonymous user.
    *
    * @param int|null $pCmpId The ID of the company.

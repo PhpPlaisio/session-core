@@ -30,6 +30,18 @@ insert into ABC_AUTH_USER( cmp_id
 values( 2
 ,       2
 ,       2
-,       'test'
+,       'user3'
+,       0 )
+;
+
+insert into ABC_AUTH_USER( cmp_id
+,                          lan_id
+,                          pro_id
+,                          usr_name
+,                          usr_anonymous )
+values( 2
+,       2
+,       2
+,       'user2'
 ,       0 )
 ;

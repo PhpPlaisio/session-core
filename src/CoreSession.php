@@ -5,6 +5,7 @@ namespace Plaisio\Session;
 
 use Plaisio\Kernel\Nub;
 use SetBased\Exception\FallenException;
+use SetBased\Exception\LogicException;
 
 /**
  * A session handler that stores the session data in a database table.
@@ -54,6 +55,32 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * @inheritDoc
+   */
+  public function destroyOtherSessionsOfUser(): void
+  {
+    // Return immediately for fake (a.k.a. non-persistent) sessions.
+    if ($this->session['ses_id']===null) return;
+
+    if ($this->isAnonymous())
+    {
+      throw new LogicException('Method destroySessions must not be invoked for anonymous users');
+    }
+
+    Nub::$DL->abcSessionCoreDestroyOtherSessionsOfUser(Nub::$companyResolver->getCmpId(), $this->session['ses_id']);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * @inheritDoc
+   */
+  public static function destroyAllSessionsOfUser(int $usrId): void
+  {
+    Nub::$DL->abcSessionCoreDestroyAllSessionsOfUser(Nub::$companyResolver->getCmpId(), $usrId);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Returns stateful double submit token to prevent CSRF attacks.
    *
    * @return string
@@ -79,12 +106,13 @@ class CoreSession implements Session
    * Returns a reference to the data of a named section of the session.
    *
    * If the named section does not yet exists a reference to null is returned. Only named sessions opened in exclusive
-   * mode will be saved by @see save.
+   * mode will be saved by @param string $name The name of the named section.
    *
-   * @param string $name The name of the named section.
-   * @param int    $mode The mode for getting the named section.
+   * @param int $mode The mode for getting the named section.
    *
    * @return mixed
+   *
+   * @see   save.
    *
    * @since 1.0.0
    * @api

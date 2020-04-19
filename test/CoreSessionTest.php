@@ -36,6 +36,112 @@ class CoreSessionTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test method destroyOtherSessionsOfUser.
+   */
+  public function testDestroyAllSessionsOfUser(): void
+  {
+    unset($_COOKIE['ses_session_token']);
+    $session31 = new CoreSession();
+    $session31->start();
+    $session31->login(3);
+    $section1          = &$session31->getNamedSection('section_exclusive', CoreSession::SECTION_EXCLUSIVE);
+    $section2          = &$session31->getNamedSection('section_exclusive', CoreSession::SECTION_SHARED);
+    $section1['hello'] = 'world';
+    $section2['foo']   = 'bar';
+    $session31->save();
+
+    unset($_COOKIE['ses_session_token']);
+    $session4 = new CoreSession();
+    $session4->start();
+    $session4->login(4);
+    $session31->save();
+
+    unset($_COOKIE['ses_session_token']);
+    $session32 = new CoreSession();
+    $session32->start();
+    $session32->login(3);
+    $session31->save();
+
+    // Destroy all sessions of user 3.
+    $session32::destroyAllSessionsOfUser(3);
+
+    // Assert session31 has been destroyed.
+    $_COOKIE['ses_session_token'] = $session31->getSessionToken();
+    $session                      = new CoreSession();
+    $session->start();
+    self::assertNotEquals($session31->getSesId(), $session->getSesId());
+    self::assertNotEquals($session31->getSessionToken(), $session->getSessionToken());
+
+    // Assert session32 has been destroyed.
+    $_COOKIE['ses_session_token'] = $session32->getSessionToken();
+    $session                      = new CoreSession();
+    $session->start();
+    self::assertNotEquals($session31->getSesId(), $session->getSesId());
+    self::assertNotEquals($session31->getSessionToken(), $session->getSessionToken());
+
+    // Assert session4 (other user) is still alive.
+    $_COOKIE['ses_session_token'] = $session4->getSessionToken();
+    $session                      = new CoreSession();
+    $session->start();
+    self::assertSame($session4->getSesId(), $session->getSesId());
+    self::assertSame($session4->getSessionToken(), $session->getSessionToken());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test method destroyOtherSessionsOfUser.
+   */
+  public function testDestroyOtherSessionsOfUser(): void
+  {
+    unset($_COOKIE['ses_session_token']);
+    $session31 = new CoreSession();
+    $session31->start();
+    $session31->login(3);
+    $section1          = &$session31->getNamedSection('section_exclusive', CoreSession::SECTION_EXCLUSIVE);
+    $section2          = &$session31->getNamedSection('section_exclusive', CoreSession::SECTION_SHARED);
+    $section1['hello'] = 'world';
+    $section2['foo']   = 'bar';
+    $session31->save();
+
+    unset($_COOKIE['ses_session_token']);
+    $session4 = new CoreSession();
+    $session4->start();
+    $session4->login(4);
+    $session31->save();
+
+    unset($_COOKIE['ses_session_token']);
+    $session32 = new CoreSession();
+    $session32->start();
+    $session32->login(3);
+    $session31->save();
+
+    // Destroy other sessions (hence session31)
+    $session32->destroyOtherSessionsOfUser();
+
+    // Assert session31 (same user, other session) has been destroyed.
+    $_COOKIE['ses_session_token'] = $session31->getSessionToken();
+    $session                      = new CoreSession();
+    $session->start();
+    self::assertNotEquals($session31->getSesId(), $session->getSesId());
+    self::assertNotEquals($session31->getSessionToken(), $session->getSessionToken());
+
+    // Assert session32 is still alive.
+    $_COOKIE['ses_session_token'] = $session32->getSessionToken();
+    $session                      = new CoreSession();
+    $session->start();
+    self::assertSame($session32->getSesId(), $session->getSesId());
+    self::assertSame($session32->getSessionToken(), $session->getSessionToken());
+
+    // Assert session4 (other user) is still alive.
+    $_COOKIE['ses_session_token'] = $session4->getSessionToken();
+    $session                      = new CoreSession();
+    $session->start();
+    self::assertSame($session4->getSesId(), $session->getSesId());
+    self::assertSame($session4->getSessionToken(), $session->getSessionToken());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test an expired anonymous session will be replaced with new session.
    */
   public function testExpiredSession1(): void
@@ -190,6 +296,98 @@ class CoreSessionTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Basic test with named sections.
+   */
+  public function testNamedSection1(): void
+  {
+    $session1 = new CoreSession();
+    $session1->start();
+
+    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_EXCLUSIVE);
+    self::assertNull($data);
+
+    $data = ['Hello', 'world'];
+
+    $token1 = $session1->getSessionToken();
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    $session2 = new CoreSession();
+    $session2->start();
+
+    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertEquals(['Hello', 'world'], $data);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Basic test with named sections read-only: data must not be saved.
+   */
+  public function testNamedSectionReadOnly1(): void
+  {
+    $session0 = new CoreSession();
+    $session0->start();
+
+    $data = &$session0->getNamedSection(__CLASS__, Session::SECTION_EXCLUSIVE);
+    self::assertNull($data);
+
+    $data = ['Hello', 'world'];
+
+    $token0 = $session0->getSessionToken();
+    $session0->save();
+
+    $_COOKIE['ses_session_token'] = $token0;
+
+    $session1 = new CoreSession();
+    $session1->start();
+
+    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertEquals(['Hello', 'world'], $data);
+
+    // Change the data.
+    $data = null;
+
+    $token1 = $session1->getSessionToken();
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    $session2 = new CoreSession();
+    $session2->start();
+
+    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertEquals(['Hello', 'world'], $data);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Basic test with named sections read-only: data must not be saved or changes.
+   */
+  public function testNamedSectionReadOnly2(): void
+  {
+    $session1 = new CoreSession();
+    $session1->start();
+
+    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertNull($data);
+
+    $data = ['Hello', 'world'];
+
+    $token1 = $session1->getSessionToken();
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    $session2 = new CoreSession();
+    $session2->start();
+
+    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
+    self::assertNull($data);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Tests for method setLanId().
    */
   public function testSetLanId(): void
@@ -279,6 +477,7 @@ class CoreSessionTest extends TestCase
     self::assertNotEquals($_COOKIE['ses_session_token'], $token);
   }
 
+
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test start session ith known session token from other company.
@@ -308,99 +507,6 @@ class CoreSessionTest extends TestCase
     self::assertNotEquals($cmpId1, $cmpId2);
     self::assertNotEquals($sesId1, $sesId2);
     self::assertNotEquals($token1, $token2);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Basic test with named sections.
-   */
-  public function testNamedSection1(): void
-  {
-    $session1 = new CoreSession();
-    $session1->start();
-
-    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_EXCLUSIVE);
-    self::assertNull($data);
-
-    $data = ['Hello', 'world'];
-
-    $token1 = $session1->getSessionToken();
-    $session1->save();
-
-    $_COOKIE['ses_session_token'] = $token1;
-
-    $session2 = new CoreSession();
-    $session2->start();
-
-    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
-    self::assertEquals(['Hello', 'world'], $data);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Basic test with named sections read-only: data must not be saved.
-   */
-  public function testNamedSectionReadOnly1(): void
-  {
-    $session0 = new CoreSession();
-    $session0->start();
-
-    $data = &$session0->getNamedSection(__CLASS__, Session::SECTION_EXCLUSIVE);
-    self::assertNull($data);
-
-    $data = ['Hello', 'world'];
-
-    $token0 = $session0->getSessionToken();
-    $session0->save();
-
-    $_COOKIE['ses_session_token'] = $token0;
-
-    $session1 = new CoreSession();
-    $session1->start();
-
-    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
-    self::assertEquals(['Hello', 'world'], $data);
-
-    // Change the data.
-    $data = null;
-
-    $token1 = $session1->getSessionToken();
-    $session1->save();
-
-    $_COOKIE['ses_session_token'] = $token1;
-
-    $session2 = new CoreSession();
-    $session2->start();
-
-    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
-    self::assertEquals(['Hello', 'world'], $data);
-  }
-
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Basic test with named sections read-only: data must not be saved or changes.
-   */
-  public function testNamedSectionReadOnly2(): void
-  {
-    $session1 = new CoreSession();
-    $session1->start();
-
-    $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
-    self::assertNull($data);
-
-    $data = ['Hello', 'world'];
-
-    $token1 = $session1->getSessionToken();
-    $session1->save();
-
-    $_COOKIE['ses_session_token'] = $token1;
-
-    $session2 = new CoreSession();
-    $session2->start();
-
-    $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
-    self::assertNull($data);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,30 @@
+/**
+ * Deletes all sessions of a user.
+ *
+ * @param p_cmp_id The ID of the company (safeguard).
+ * @param p_usr_id The ID of the user.
+ */
+create procedure abc_session_core_destroy_all_sessions_of_user(in p_cmp_id @abc_auth_session.cmp_id%type@,
+                                                               in p_usr_id @abc_auth_session.usr_id%type@)
+modifies sql data
+-- type: none
+begin
+  delete from ans
+  using ABC_AUTH_SESSION_NAMED_LOCK  ans
+  join  ABC_AUTH_SESSION             ses  on  ses.ses_id = ans.ses_id
+  where ses.cmp_id  = p_cmp_id
+  and   ses.usr_id  = p_usr_id
+  ;
+
+  delete from ans
+  using ABC_AUTH_SESSION_NAMED ans
+  join  ABC_AUTH_SESSION       ses  on  ses.ses_id = ans.ses_id
+  where ses.cmp_id  = p_cmp_id
+  and   ses.usr_id  = p_usr_id
+  ;
+
+  delete from ABC_AUTH_SESSION
+  where cmp_id  = p_cmp_id
+  and   usr_id  = p_usr_id
+  ;
+end

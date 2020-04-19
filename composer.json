@@ -11,7 +11,7 @@
   "require": {
     "php": ">=7.3",
     "plaisio/kernel": "^1.1",
-    "plaisio/session": "^1.1"
+    "plaisio/session": "^2.0"
   },
   "require-dev": {
     "phing/phing": "^2.0",
