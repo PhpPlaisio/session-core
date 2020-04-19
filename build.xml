@@ -4,13 +4,7 @@
         <exec command="composer update" checkreturn="true" passthru="true"/>
     </target>
 
-    <!-- Runs ApiGen -->
-    <target name="apigen">
-        <exec command="apigen generate --todo --tree --source src --destination doc" passthru="true" checkreturn="true"/>
-    </target>
-
     <target name="unit-before">
-        <symlink target="../../vendor/plaisio/babel-core/lib/psql/" link="lib/psql/babel-core"/>
         <exec command="cat test/ddl/0010_create_database.sql                             | mysql -v -u root"      passthru="true" checkreturn="true"/>
         <exec command="cat test/ddl/0020_create_user.sql                                 | mysql -v -u root"      passthru="true" checkreturn="true"/>
         <exec command="cat vendor/plaisio/db-company/lib/ddl/0100_create_tables.sql      | mysql -v -u root test" passthru="true" checkreturn="true"/>

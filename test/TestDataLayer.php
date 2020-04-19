@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace Plaisio\Session\Test;
 
-use \SetBased\Stratum\MySql\DataLayer;
+use SetBased\Stratum\MySql\Exception\MySqlQueryErrorException;
+use SetBased\Stratum\Middle\Exception\ResultException;
+use SetBased\Stratum\MySql\Exception\MySqlDataLayerException;
+use SetBased\Stratum\MySql\MySqlDataLayer;
 
 /**
  * The data layer.
  */
-class TestDataLayer extends DataLayer
+class TestDataLayer extends MySqlDataLayer
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -18,6 +21,9 @@ class TestDataLayer extends DataLayer
    *                         smallint(5) unsigned
    *
    * @return array
+   *
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcAuthSessionFakeSession(?int $pCmpId): array
   {
@@ -34,6 +40,9 @@ class TestDataLayer extends DataLayer
    *                                      varchar(64) character set ascii collation ascii_general_ci
    *
    * @return array|null
+   *
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcAuthSessionGetSession(?int $pCmpId, ?string $pSesSessionToken): ?array
   {
@@ -56,6 +65,9 @@ class TestDataLayer extends DataLayer
    *                                      varchar(64) character set ascii collation ascii_general_ci
    *
    * @return array
+   *
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcAuthSessionLogin(?int $pCmpId, ?int $pSesId, ?int $pUsrId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
   {
@@ -78,6 +90,9 @@ class TestDataLayer extends DataLayer
    *                                      varchar(64) character set ascii collation ascii_general_ci
    *
    * @return array
+   *
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcAuthSessionLogout(?int $pCmpId, ?int $pSesId, ?int $pLanId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
   {
@@ -96,6 +111,8 @@ class TestDataLayer extends DataLayer
    *                              varchar(128) character set latin1 collation latin1_swedish_ci
    *
    * @return int
+   *
+   * @throws MySqlQueryErrorException;
    */
   public function abcAuthSessionNamedSectionDelete(?int $pCmpId, ?int $pSesId, ?string $pAnsName): int
   {
@@ -116,6 +133,9 @@ class TestDataLayer extends DataLayer
    *                              int(11)
    *
    * @return array|null
+   *
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcAuthSessionNamedSectionGet(?int $pCmpId, ?int $pSesId, ?string $pAnsName, ?int $pMode): ?array
   {
@@ -136,16 +156,20 @@ class TestDataLayer extends DataLayer
    *                              longblob
    *
    * @return int
+   *
+   * @throws MySqlDataLayerException;
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcAuthSessionNamedSectionUpdate(?int $pCmpId, ?int $pSesId, ?string $pAnsName, ?string $pAnsData)
   {
     $query = 'call abc_auth_session_named_section_update('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteString($pAnsName).',?)';
-    $stmt  = $this->mysqli->prepare($query);
-    if (!$stmt) $this->dataLayerError('mysqli::prepare');
+    $stmt  = @$this->mysqli->prepare($query);
+    if (!$stmt) throw $this->dataLayerError('mysqli::prepare');
 
     $null = null;
-    $b = $stmt->bind_param('b', $null);
-    if (!$b) $this->dataLayerError('mysqli_stmt::bind_param');
+    $success = @$stmt->bind_param('b', $null);
+    if (!$success) throw $this->dataLayerError('mysqli_stmt::bind_param');
 
     $this->getMaxAllowedPacket();
 
@@ -155,16 +179,16 @@ class TestDataLayer extends DataLayer
     {
       $time0 = microtime(true);
 
-      $b = $stmt->execute();
-      if (!$b) $this->queryError('mysqli_stmt::execute', $query);
+      $success = @$stmt->execute();
+      if (!$success) throw $this->queryError('mysqli_stmt::execute', $query);
 
       $this->queryLog[] = ['query' => $query,
                            'time'  => microtime(true) - $time0];
     }
     else
     {
-      $b = $stmt->execute();
-      if (!$b) $this->queryError('mysqli_stmt::execute', $query);
+      $success = $stmt->execute();
+      if (!$success) throw $this->queryError('mysqli_stmt::execute', $query);
     }
 
     $ret = $this->mysqli->affected_rows;
@@ -189,6 +213,9 @@ class TestDataLayer extends DataLayer
    *                                      varchar(64) character set ascii collation ascii_general_ci
    *
    * @return array
+   *
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcAuthSessionStartSession(?int $pCmpId, ?int $pLanId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
   {
@@ -207,6 +234,8 @@ class TestDataLayer extends DataLayer
    *                         tinyint(3) unsigned
    *
    * @return int
+   *
+   * @throws MySqlQueryErrorException;
    */
   public function abcAuthSessionUpdateLanId(?int $pCmpId, ?int $pSesId, ?int $pLanId): int
   {
@@ -225,16 +254,20 @@ class TestDataLayer extends DataLayer
    *                              longblob
    *
    * @return int
+   *
+   * @throws MySqlDataLayerException;
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcAuthSessionUpdateSession(?int $pCmpId, ?int $pSesId, ?string $pSesData)
   {
     $query = 'call abc_auth_session_update_session('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).',?)';
-    $stmt  = $this->mysqli->prepare($query);
-    if (!$stmt) $this->dataLayerError('mysqli::prepare');
+    $stmt  = @$this->mysqli->prepare($query);
+    if (!$stmt) throw $this->dataLayerError('mysqli::prepare');
 
     $null = null;
-    $b = $stmt->bind_param('b', $null);
-    if (!$b) $this->dataLayerError('mysqli_stmt::bind_param');
+    $success = @$stmt->bind_param('b', $null);
+    if (!$success) throw $this->dataLayerError('mysqli_stmt::bind_param');
 
     $this->getMaxAllowedPacket();
 
@@ -244,16 +277,16 @@ class TestDataLayer extends DataLayer
     {
       $time0 = microtime(true);
 
-      $b = $stmt->execute();
-      if (!$b) $this->queryError('mysqli_stmt::execute', $query);
+      $success = @$stmt->execute();
+      if (!$success) throw $this->queryError('mysqli_stmt::execute', $query);
 
       $this->queryLog[] = ['query' => $query,
                            'time'  => microtime(true) - $time0];
     }
     else
     {
-      $b = $stmt->execute();
-      if (!$b) $this->queryError('mysqli_stmt::execute', $query);
+      $success = $stmt->execute();
+      if (!$success) throw $this->queryError('mysqli_stmt::execute', $query);
     }
 
     $ret = $this->mysqli->affected_rows;
@@ -269,6 +302,8 @@ class TestDataLayer extends DataLayer
    * Selects all language codes as map from language code to language ID.
    *
    * @return array
+   *
+   * @throws MySqlQueryErrorException;
    */
   public function abcBabelCoreInternalCodeMap(): array
   {
@@ -289,6 +324,9 @@ class TestDataLayer extends DataLayer
    *                         tinyint(3) unsigned
    *
    * @return array
+   *
+   * @throws MySqlQueryErrorException;
+   * @throws ResultException;
    */
   public function abcBabelCoreLanguageGetDetails(?int $pLanId): array
   {
@@ -305,6 +343,9 @@ class TestDataLayer extends DataLayer
    *                         tinyint(3) unsigned
    *
    * @return string
+   *
+   * @throws MySqlDataLayerException;
+   * @throws ResultException;
    */
   public function abcBabelCoreTextGetText(?int $pTxtId, ?int $pLanId): string
   {
@@ -321,6 +362,9 @@ class TestDataLayer extends DataLayer
    *                         tinyint(3) unsigned
    *
    * @return string
+   *
+   * @throws MySqlDataLayerException;
+   * @throws ResultException;
    */
   public function abcBabelCoreWordGetWord(?int $pWrdId, ?int $pLanId): string
   {

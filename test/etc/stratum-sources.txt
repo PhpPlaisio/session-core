@@ -1,0 +1,2 @@
+lib/psql/**/*.psql
+vendor/plaisio/babel-core/lib/psql/**/*.psql
