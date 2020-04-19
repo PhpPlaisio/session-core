@@ -3,7 +3,7 @@
  *
  * @param p_cmp_id The ID of the company.
  */
-create procedure abc_auth_session_fake_session(in p_cmp_id @abc_auth_session.cmp_id%type@)
+create procedure abc_session_core_fake_session(in p_cmp_id @abc_auth_session.cmp_id%type@)
 modifies sql data
 -- type: row1
 begin

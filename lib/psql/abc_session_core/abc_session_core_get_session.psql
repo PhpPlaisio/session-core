@@ -4,7 +4,7 @@
  * @param p_cmp_id            The ID of the company of the user (safe guard).
  * @param p_ses_session_token The session token.
  */
-create procedure abc_auth_session_get_session(in p_cmp_id            @abc_auth_session.cmp_id%type@,
+create procedure abc_session_core_get_session(in p_cmp_id            @abc_auth_session.cmp_id%type@,
                                               in p_ses_session_token @abc_auth_session.ses_session_token%type@)
 modifies sql data
 -- type: row0

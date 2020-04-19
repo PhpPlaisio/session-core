@@ -5,7 +5,7 @@
  * @param p_ses_id   The ID of the session.
  * @param p_ses_data The new additional data of the session.
  */
-create procedure abc_auth_session_update_session(in p_cmp_id   @abc_auth_session.cmp_id%type@,
+create procedure abc_session_core_update_session(in p_cmp_id   @abc_auth_session.cmp_id%type@,
                                                  in p_ses_id   @abc_auth_session.ses_id%type@,
                                                  in p_ses_data @abc_auth_session.ses_data%type@)
 modifies sql data
