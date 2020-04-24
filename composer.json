@@ -18,7 +18,7 @@
     "phpunit/phpunit": "^9.0",
     "plaisio/babel-core": "^1.1",
     "plaisio/company-resolver-uni": "^1.1",
-    "plaisio/console": "^0.2.11",
+    "plaisio/console": "^1.0",
     "plaisio/db-company": "^1.1",
     "plaisio/db-profile": "^1.1",
     "plaisio/db-user": "^1.1",

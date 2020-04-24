@@ -2,6 +2,11 @@
     <!-- Run composer update and executes various other updates -->
     <target name="update">
         <exec command="composer update" checkreturn="true" passthru="true"/>
+        <exec executable="bin/plaisio" checkreturn="true" passthru="true">
+            <arg value="--ansi"/>
+            <arg value="plaisio:data-layer-type-annotation"/>
+            <arg value="\\Plaisio\\Session\\Test\\TestDataLayer"/>
+        </exec>
     </target>
 
     <target name="unit-before">
