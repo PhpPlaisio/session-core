@@ -5,7 +5,6 @@ namespace Plaisio\Session\Test;
 
 use PHPUnit\Framework\TestCase;
 use Plaisio\C;
-use Plaisio\CompanyResolver\UniCompanyResolver;
 use Plaisio\Kernel\Nub;
 use Plaisio\Session\CoreSession;
 use Plaisio\Session\Session;
@@ -21,18 +20,7 @@ class CoreSessionTest extends TestCase
    *
    * @var Nub
    */
-  private static $nub;
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Creates the concrete implementation of the ABC TestNub.
-   */
-  public static function setUpBeforeClass(): void
-  {
-    parent::setUpBeforeClass();
-
-    self::$nub = new TestNub();
-  }
+  private $kernel;
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -477,7 +465,6 @@ class CoreSessionTest extends TestCase
     self::assertNotEquals($_COOKIE['ses_session_token'], $token);
   }
 
-
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test start session ith known session token from other company.
@@ -490,10 +477,10 @@ class CoreSessionTest extends TestCase
     $session1->start();
     $token1 = $session1->getSessionToken();
     $sesId1 = $session1->getSesId();
-    $cmpId1 = Nub::$companyResolver->getCmpId();
+    $cmpId1 = Nub::$nub->companyResolver->getCmpId();
     $session1->save();
 
-    Nub::$companyResolver = new UniCompanyResolver(C::CMP_ID_SYS);
+    $this->kernel = new TestKernelSys();
 
     $_COOKIE['ses_session_token'] = $token1;
 
@@ -501,7 +488,7 @@ class CoreSessionTest extends TestCase
     $session2->start();
     $token2 = $session2->getSessionToken();
     $sesId2 = $session2->getSesId();
-    $cmpId2 = Nub::$companyResolver->getCmpId();
+    $cmpId2 = Nub::$nub->companyResolver->getCmpId();
     $session2->save();
 
     self::assertNotEquals($cmpId1, $cmpId2);
@@ -509,18 +496,14 @@ class CoreSessionTest extends TestCase
     self::assertNotEquals($token1, $token2);
   }
 
+
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Connects to the MySQL server and cleans the BLOB tables.
+   * @inheritDoc
    */
   protected function setUp(): void
   {
-    Nub::$DL->connect('localhost', 'test', 'test', 'test');
-    Nub::$DL->begin();
-    Nub::$DL->executeNone('delete from ABC_AUTH_SESSION');
-    Nub::$DL->executeNone('delete from ABC_AUTH_SESSION_NAMED');
-    Nub::$DL->executeNone('delete from ABC_AUTH_SESSION_NAMED_LOCK');
-    Nub::$babel->setLanguage(C::LAN_ID_EN);
+    $this->kernel = new TestKernelPlaisio();
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -529,8 +512,8 @@ class CoreSessionTest extends TestCase
    */
   protected function tearDown(): void
   {
-    Nub::$DL->commit();
-    Nub::$DL->disconnect();
+    Nub::$nub->DL->commit();
+    Nub::$nub->DL->disconnect();
   }
 
   //--------------------------------------------------------------------------------------------------------------------

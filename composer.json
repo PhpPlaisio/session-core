@@ -6,11 +6,10 @@
     "Session",
     "Core"
   ],
-  "type": "library",
   "license": "MIT",
   "require": {
     "php": ">=7.3",
-    "plaisio/kernel": "^1.1",
+    "plaisio/kernel": "^2.0",
     "plaisio/session": "^2.0"
   },
   "require-dev": {
@@ -18,7 +17,7 @@
     "phpunit/phpunit": "^9.0",
     "plaisio/babel-core": "^1.1",
     "plaisio/company-resolver-uni": "^1.1",
-    "plaisio/console": "^1.0",
+    "plaisio/console": "^1.1",
     "plaisio/db-company": "^1.1",
     "plaisio/db-profile": "^1.1",
     "plaisio/db-user": "^1.1",
