@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Plaisio\Session;
 
-use Plaisio\Kernel\Nub;
+use Plaisio\PlaisioObject;
 use SetBased\Exception\FallenException;
 use SetBased\Exception\LogicException;
 
 /**
  * A session handler that stores the session data in a database table.
  */
-class CoreSession implements Session
+class CoreSession extends PlaisioObject implements Session
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -43,15 +43,6 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * @inheritDoc
-   */
-  public static function destroyAllSessionsOfUser(int $usrId): void
-  {
-    Nub::$nub->DL->abcSessionCoreDestroyAllSessionsOfUser(Nub::$nub->companyResolver->getCmpId(), $usrId);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Returns a secure random token that can be safely used for session IDs. The length of the token is 64 HEX
    * characters.
    *
@@ -64,20 +55,69 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Returns the value of a property.
+   *
+   * Do not call this method directly as it is a PHP magic method that
+   * will be implicitly called when executing `$value = $object->property;`.
+   *
+   * @param string $property The name of the property.
+   *
+   * @return mixed The value of the property.
+   *
+   * @throws \LogicException If the property is not defined.
+   */
+  public function __get(string $property)
+  {
+    $getter = 'get'.ucfirst($property);
+    if (method_exists($this, $getter))
+    {
+      return $this->$property = $this->$getter();
+    }
+
+    throw new \LogicException(sprintf('Unknown property %s::%s', __CLASS__, $property));
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * @inheritDoc
    */
-  public function destroyOtherSessionsOfUser(): void
+  public function destroyAllSessions(): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
 
     if ($this->isAnonymous())
     {
-      throw new LogicException('Method destroySessions must not be invoked for anonymous users');
+      throw new LogicException('Method %s must not be invoked for anonymous users', __METHOD__);
     }
 
-    Nub::$nub->DL->abcSessionCoreDestroyOtherSessionsOfUser(Nub::$nub->companyResolver->getCmpId(),
-                                                            $this->session['ses_id']);
+    $this->nub->DL->abcSessionCoreDestroyAllSessionsOfUser($this->nub->company->cmpId, $this->session['usr_id']);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * @inheritDoc
+   */
+  public function destroyAllSessionsOfUser(int $usrId): void
+  {
+    $this->nub->DL->abcSessionCoreDestroyAllSessionsOfUser($this->nub->company->cmpId, $usrId);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * @inheritDoc
+   */
+  public function destroyOtherSessions(): void
+  {
+    // Return immediately for fake (a.k.a. non-persistent) sessions.
+    if ($this->session['ses_id']===null) return;
+
+    if ($this->isAnonymous())
+    {
+      throw new LogicException('Method % must not be invoked for anonymous users', __METHOD__);
+    }
+
+    $this->nub->DL->abcSessionCoreDestroyOtherSessionsOfUser($this->nub->company->cmpId, $this->session['ses_id']);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -128,10 +168,10 @@ class CoreSession implements Session
       }
       else
       {
-        $section = Nub::$nub->DL->abcSessionCoreNamedSectionGet(Nub::$nub->companyResolver->getCmpId(),
-                                                                $this->session['ses_id'],
-                                                                $name,
-                                                                $mode);
+        $section = $this->nub->DL->abcSessionCoreNamedSectionGet($this->nub->company->cmpId,
+                                                                 $this->session['ses_id'],
+                                                                 $name,
+                                                                 $mode);
       }
 
       if ($section===null)
@@ -153,28 +193,6 @@ class CoreSession implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns the ID of the profile of the user of the current session.
-   *
-   * @return int
-   */
-  public function getProId(): int
-  {
-    return $this->session['pro_id'];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns the ID of the current session.
-   *
-   * @return int|null
-   */
-  public function getSesId(): ?int
-  {
-    return $this->session['ses_id'];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Returns the session token.
    *
    * @return string
@@ -182,17 +200,6 @@ class CoreSession implements Session
   public function getSessionToken(): string
   {
     return $this->session['ses_session_token'];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns the ID of the user of the current session.
-   *
-   * @return int
-   */
-  public function getUsrId(): int
-  {
-    return $this->session['usr_id'];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -217,12 +224,13 @@ class CoreSession implements Session
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
 
-    $this->session = Nub::$nub->DL->abcSessionCoreLogin($this->session['cmp_id'],
-                                                        $this->session['ses_id'],
-                                                        $usrId,
-                                                        self::getRandomToken(),
-                                                        self::getRandomToken());
+    $this->session = $this->nub->DL->abcSessionCoreLogin($this->session['cmp_id'],
+                                                         $this->session['ses_id'],
+                                                         $usrId,
+                                                         self::getRandomToken(),
+                                                         self::getRandomToken());
 
+    $this->unsetProperties();
     $this->unpackSession();
     $this->setCookies();
   }
@@ -236,12 +244,13 @@ class CoreSession implements Session
     // Return immediately for fake (a.k.a. non-persistent) sessions.
     if ($this->session['ses_id']===null) return;
 
-    $this->session = Nub::$nub->DL->abcSessionCoreLogout($this->session['cmp_id'],
-                                                         $this->session['ses_id'],
-                                                         Nub::$nub->languageResolver->getLanId(),
-                                                         self::getRandomToken(),
-                                                         self::getRandomToken());
+    $this->session = $this->nub->DL->abcSessionCoreLogout($this->session['cmp_id'],
+                                                          $this->session['ses_id'],
+                                                          $this->nub->languageResolver->getLanId(),
+                                                          self::getRandomToken(),
+                                                          self::getRandomToken());
 
+    $this->unsetProperties();
     $this->unpackSession();
     $this->setCookies();
   }
@@ -256,7 +265,7 @@ class CoreSession implements Session
     if ($this->session['ses_id']===null) return;
 
     $serial = (!empty($_SESSION)) ? serialize($_SESSION) : null;
-    Nub::$nub->DL->abcSessionCoreUpdateSession($this->session['cmp_id'], $this->session['ses_id'], $serial);
+    $this->nub->DL->abcSessionCoreUpdateSession($this->session['cmp_id'], $this->session['ses_id'], $serial);
 
     foreach ($this->sections as $name => $section)
     {
@@ -289,7 +298,7 @@ class CoreSession implements Session
     if ($this->session['ses_id']===null) return;
 
     $this->session['lan_id'] = $lanId;
-    Nub::$nub->DL->abcSessionCoreUpdateLanId($this->session['cmp_id'], $this->session['ses_id'], $lanId);
+    $this->nub->DL->abcSessionCoreUpdateLanId($this->session['cmp_id'], $this->session['ses_id'], $lanId);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -302,38 +311,71 @@ class CoreSession implements Session
     if ($sesSessionToken===null)
     {
       // Start a new session.
-      $this->session = Nub::$nub->DL->abcSessionCoreStartSession(Nub::$nub->companyResolver->getCmpId(),
-                                                                 Nub::$nub->languageResolver->getLanId(),
-                                                                 self::getRandomToken(),
-                                                                 self::getRandomToken());
+      $this->session = $this->nub->DL->abcSessionCoreStartSession($this->nub->company->cmpId,
+                                                                  $this->nub->languageResolver->getLanId(),
+                                                                  self::getRandomToken(),
+                                                                  self::getRandomToken());
     }
     else
     {
-      $this->session = Nub::$nub->DL->abcSessionCoreGetSession(Nub::$nub->companyResolver->getCmpId(),
-                                                               $sesSessionToken);
+      $this->session = $this->nub->DL->abcSessionCoreGetSession($this->nub->company->cmpId, $sesSessionToken);
 
       if (empty($this->session))
       {
         // Session has expired and removed from the database or the session token was not generated by this web site.
         // Start a new session with new tokens.
-        $this->session = Nub::$nub->DL->abcSessionCoreStartSession(Nub::$nub->companyResolver->getCmpId(),
-                                                                   Nub::$nub->languageResolver->getLanId(),
-                                                                   self::getRandomToken(),
-                                                                   self::getRandomToken());
+        $this->session = $this->nub->DL->abcSessionCoreStartSession($this->nub->company->cmpId,
+                                                                    $this->nub->languageResolver->getLanId(),
+                                                                    self::getRandomToken(),
+                                                                    self::getRandomToken());
       }
       elseif (($this->session['ses_last_request'] + self::$timeout)<=time())
       {
         // Session has expired. Restart the session, i.e. delete all data stored in the session and use new tokens.
-        $this->session = Nub::$nub->DL->abcSessionCoreLogout($this->session['cmp_id'],
-                                                             $this->session['ses_id'],
-                                                             Nub::$nub->languageResolver->getLanId(),
-                                                             self::getRandomToken(),
-                                                             self::getRandomToken());
+        $this->session = $this->nub->DL->abcSessionCoreLogout($this->session['cmp_id'],
+                                                              $this->session['ses_id'],
+                                                              $this->nub->languageResolver->getLanId(),
+                                                              self::getRandomToken(),
+                                                              self::getRandomToken());
       }
     }
 
+    $this->unsetProperties();
     $this->unpackSession();
     $this->setCookies();
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the ID of the profile of the user of the current session.
+   *
+   * @return int
+   */
+  protected function getProId(): int
+  {
+    return $this->session['pro_id'];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the ID of the current session.
+   *
+   * @return int|null
+   */
+  protected function getSesId(): ?int
+  {
+    return $this->session['ses_id'];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the ID of the user of the current session.
+   *
+   * @return int
+   */
+  protected function getUsrId(): int
+  {
+    return $this->session['usr_id'];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -344,7 +386,7 @@ class CoreSession implements Session
   {
     if (isset($_SERVER['HTTPS']))
     {
-      $domain = Nub::$nub->canonicalHostnameResolver->getCanonicalHostname();
+      $domain = $this->nub->canonicalHostnameResolver->getCanonicalHostname();
 
       // Set session cookie.
       setcookie('ses_session_token',
@@ -400,17 +442,28 @@ class CoreSession implements Session
   {
     if ($data===null)
     {
-      Nub::$nub->DL->abcSessionCoreNamedSectionDelete(Nub::$nub->companyResolver->getCmpId(),
-                                                      $this->session['ses_id'],
-                                                      $name);
+      $this->nub->DL->abcSessionCoreNamedSectionDelete($this->nub->company->cmpId,
+                                                       $this->session['ses_id'],
+                                                       $name);
     }
     else
     {
-      Nub::$nub->DL->abcSessionCoreNamedSectionUpdate(Nub::$nub->companyResolver->getCmpId(),
-                                                      $this->session['ses_id'],
-                                                      $name,
-                                                      serialize($data));
+      $this->nub->DL->abcSessionCoreNamedSectionUpdate($this->nub->company->cmpId,
+                                                       $this->session['ses_id'],
+                                                       $name,
+                                                       serialize($data));
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Unset properties that are accessible via magic getter,
+   */
+  private function unsetProperties(): void
+  {
+    unset($this->proId);
+    unset($this->sesId);
+    unset($this->usrId);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

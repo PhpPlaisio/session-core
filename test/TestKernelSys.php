@@ -8,32 +8,23 @@ use Plaisio\Babel\CoreBabel;
 use Plaisio\C;
 use Plaisio\CompanyResolver\CompanyResolver;
 use Plaisio\CompanyResolver\UniCompanyResolver;
-use Plaisio\Kernel\Nub;
 use Plaisio\LanguageResolver\CoreLanguageResolver;
 use Plaisio\LanguageResolver\LanguageResolver;
+use Plaisio\PlaisioKernel;
 use SetBased\Stratum\MySql\MySqlDefaultConnector;
 
 /**
  * Kernel for testing purposes.
  */
-class TestKernelSys extends Nub
+class TestKernelSys extends PlaisioKernel
 {
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Object constructor.
-   */
-  public function __construct()
-  {
-    parent::__construct();
-  }
-
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Returns the helper object for deriving the company.
    *
    * @return CompanyResolver
    */
-  public function getCompanyResolver(): CompanyResolver
+  public function getCompany(): CompanyResolver
   {
     return new UniCompanyResolver(C::CMP_ID_SYS);
   }
@@ -46,7 +37,7 @@ class TestKernelSys extends Nub
    */
   protected function getBabel(): Babel
   {
-    $babel = new CoreBabel();
+    $babel = new CoreBabel($this);
     $babel->setLanguage(C::LAN_ID_EN);
 
     return $babel;
@@ -67,6 +58,7 @@ class TestKernelSys extends Nub
     $dl->executeNone('delete from ABC_AUTH_SESSION');
     $dl->executeNone('delete from ABC_AUTH_SESSION_NAMED');
     $dl->executeNone('delete from ABC_AUTH_SESSION_NAMED_LOCK');
+    $dl->commit();
 
     return $dl;
   }
@@ -77,7 +69,7 @@ class TestKernelSys extends Nub
    */
   protected function getLanguageResolver(): LanguageResolver
   {
-    return new CoreLanguageResolver(C::LAN_ID_EN);
+    return new CoreLanguageResolver($this, C::LAN_ID_EN);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

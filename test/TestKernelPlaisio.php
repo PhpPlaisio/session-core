@@ -18,7 +18,7 @@ class TestKernelPlaisio extends TestKernelSys
    *
    * @return CompanyResolver
    */
-  public function getCompanyResolver(): CompanyResolver
+  public function getCompany(): CompanyResolver
   {
     return new UniCompanyResolver(C::CMP_ID_PLAISIO);
   }
