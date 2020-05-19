@@ -364,7 +364,7 @@ class CoreSession extends PlaisioObject implements Session
    */
   protected function getSesId(): ?int
   {
-    return $this->session['ses_id'];
+    return $this->session['ses_id'] ?? null;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
