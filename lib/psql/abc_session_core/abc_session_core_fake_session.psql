@@ -8,6 +8,7 @@ modifies sql data
 -- type: row1
 begin
   select @abc_g_ses_id := null  as  ses_id
+  ,      usr.cmp_id
   ,      usr.lan_id
   ,      null
   ,      null
@@ -15,16 +16,12 @@ begin
   ,      null
   ,      null
 
-  ,      cmp.cmp_id
-  ,      cmp.cmp_abbr
-
   ,      @abc_g_usr_id := usr.usr_id  as  usr_id
   ,      usr.usr_anonymous
 
   ,      pro.pro_id
   ,      pro.pro_flags
   from       ABC_AUTH_USER    usr
-  inner join ABC_AUTH_COMPANY cmp  on  cmp.cmp_id = usr.cmp_id
   inner join ABC_AUTH_PROFILE pro  on  pro.pro_id = usr.pro_id
   where  usr.cmp_id        = p_cmp_id
   and    usr.usr_anonymous = 1

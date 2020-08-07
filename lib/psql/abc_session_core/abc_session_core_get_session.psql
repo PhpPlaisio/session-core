@@ -10,6 +10,7 @@ modifies sql data
 -- type: row0
 begin
   select @abc_g_ses_id := ses.ses_id  as  ses_id
+  ,      ses.cmp_id
   ,      ses.lan_id
   ,      ses.ses_session_token
   ,      ses.ses_csrf_token
@@ -17,19 +18,15 @@ begin
   ,      ses.ses_has_flash_message
   ,      ses.ses_data
 
-  ,      cmp.cmp_id
-  ,      cmp.cmp_abbr
-
   ,      @abc_g_usr_id := usr.usr_id  as  usr_id
   ,      usr.usr_anonymous
 
   ,      pro.pro_id
   ,      pro.pro_flags
   from       ABC_AUTH_SESSION ses
-  inner join ABC_AUTH_COMPANY cmp  on  cmp.cmp_id = ses.cmp_id
   inner join ABC_AUTH_USER    usr  on  usr.usr_id = ses.usr_id
   inner join ABC_AUTH_PROFILE pro  on  pro.pro_id = usr.pro_id
-  where  ses.ses_session_token = p_ses_session_token
-  and    cmp.cmp_id            = p_cmp_id
+  where ses.cmp_id            = p_cmp_id
+  and   ses.ses_session_token = p_ses_session_token
   ;
 end
