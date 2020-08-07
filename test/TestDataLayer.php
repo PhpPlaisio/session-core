@@ -142,7 +142,7 @@ class TestDataLayer extends MySqlDataLayer
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Gets a session based a session token.
+   * Gets a session given a session token.
    *
    * @param int|null    $pCmpId           The ID of the company of the user (safe guard).
    *                                      smallint(5) unsigned
