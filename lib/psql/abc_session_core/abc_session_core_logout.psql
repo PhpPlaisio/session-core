@@ -35,11 +35,12 @@ begin
   ;
 
   update ABC_AUTH_SESSION
-  set usr_id            = l_usr_id
-  ,   lan_id            = p_lan_id
-  ,   ses_session_token = p_ses_session_token
-  ,   ses_csrf_token    = p_ses_csrf_token
-  ,   ses_data          = null
+  set usr_id                = l_usr_id
+  ,   lan_id                = p_lan_id
+  ,   ses_session_token     = p_ses_session_token
+  ,   ses_csrf_token        = p_ses_csrf_token
+  ,   ses_has_flash_message = 0
+  ,   ses_data              = null
   where ses_id = p_ses_id
   and   cmp_id = p_cmp_id
   ;

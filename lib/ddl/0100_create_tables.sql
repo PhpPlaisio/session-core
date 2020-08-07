@@ -1,11 +1,11 @@
 /*================================================================================*/
 /* DDL SCRIPT                                                                     */
 /*================================================================================*/
-/*  Title    : ABC-Framework: Core Session                                        */
-/*  FileName : abc-session-core.ecm                                               */
+/*  Title    : Plaisio: Core Session                                              */
+/*  FileName : session-core.ecm                                                   */
 /*  Platform : MySQL 5.6                                                          */
 /*  Version  :                                                                    */
-/*  Date     : vrijdag 29 juni 2018                                               */
+/*  Date     : vrijdag 7 augustus 2020                                            */
 /*================================================================================*/
 /*================================================================================*/
 /* CREATE TABLES                                                                  */
@@ -19,9 +19,20 @@ CREATE TABLE ABC_AUTH_SESSION (
   ses_session_token VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   ses_csrf_token VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   ses_last_request BIGINT UNSIGNED NOT NULL,
+  ses_has_flash_message BOOL DEFAULT 0 NOT NULL,
   ses_data LONGBLOB,
   CONSTRAINT PK_ABC_AUTH_SESSION PRIMARY KEY (ses_id)
 );
+
+/*
+COMMENT ON COLUMN ABC_AUTH_SESSION.ses_has_flash_message
+If and only if 1 there are one or more flash messages.
+*/
+
+/*
+COMMENT ON COLUMN ABC_AUTH_SESSION.ses_data
+The optional additional session data.
+*/
 
 CREATE TABLE ABC_AUTH_SESSION_NAMED (
   ses_id INT UNSIGNED NOT NULL,

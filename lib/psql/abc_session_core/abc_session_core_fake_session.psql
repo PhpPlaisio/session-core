@@ -13,6 +13,7 @@ begin
   ,      null
   ,      null
   ,      null
+  ,      null
 
   ,      cmp.cmp_id
   ,      cmp.cmp_abbr

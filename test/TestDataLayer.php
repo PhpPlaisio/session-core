@@ -356,12 +356,14 @@ class TestDataLayer extends MySqlDataLayer
   /**
    * Updates a session.
    *
-   * @param int|null    $pCmpId   The ID of the company (safe guard).
-   *                              smallint(5) unsigned
-   * @param int|null    $pSesId   The ID of the session.
-   *                              int(10) unsigned
-   * @param string|null $pSesData The new additional data of the session.
-   *                              longblob
+   * @param int|null    $pCmpId              The ID of the company (safe guard).
+   *                                         smallint(5) unsigned
+   * @param int|null    $pSesId              The ID of the session.
+   *                                         int(10) unsigned
+   * @param int|null    $pSesHasFlashMessage If and only if 1 there are one or more flash messages.
+   *                                         tinyint(1)
+   * @param string|null $pSesData            The new additional data of the session.
+   *                                         longblob
    *
    * @return int
    *
@@ -369,9 +371,9 @@ class TestDataLayer extends MySqlDataLayer
    * @throws MySqlQueryErrorException;
    * @throws ResultException;
    */
-  public function abcSessionCoreUpdateSession(?int $pCmpId, ?int $pSesId, ?string $pSesData)
+  public function abcSessionCoreUpdateSession(?int $pCmpId, ?int $pSesId, ?int $pSesHasFlashMessage, ?string $pSesData)
   {
-    $query = 'call abc_session_core_update_session('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).',?)';
+    $query = 'call abc_session_core_update_session('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteInt($pSesHasFlashMessage).',?)';
     $stmt  = @$this->mysqli->prepare($query);
     if (!$stmt) throw $this->dataLayerError('mysqli::prepare');
 

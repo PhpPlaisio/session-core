@@ -23,6 +23,7 @@ class CoreSessionTest extends TestCase
   private $kernel;
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Test method destroyOtherSessionsOfUser.
    */
@@ -186,6 +187,68 @@ class CoreSessionTest extends TestCase
     self::assertEmpty($_SESSION);
     self::assertEquals(2, $session2->usrId);
     self::assertTrue($session2->isAnonymous());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test flash message: initial no flash message.
+   */
+  public function testFlashMessage01(): void
+  {
+    $_COOKIE['ses_session_token'] = null;
+
+    $session = new CoreSession($this->kernel);
+    $session->start();
+    $hasFlashMessage = $session->getHasFlashMessage();
+
+    self::assertFalse($hasFlashMessage);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test flash message: consistently saved.
+   */
+  public function testFlashMessage02(): void
+  {
+    $_COOKIE['ses_session_token'] = null;
+
+    $session1 = new CoreSession($this->kernel);
+    $session1->start();
+    $token1            = $session1->getSessionToken();
+    $hasFlashMessage1a = $session1->getHasFlashMessage();
+    self::assertFalse($hasFlashMessage1a);
+    $session1->setHasFlashMessage(true);
+    $hasFlashMessage1b = $session1->getHasFlashMessage();
+    self::assertTrue($hasFlashMessage1b);
+    $session1->save();
+
+    $_COOKIE['ses_session_token'] = $token1;
+
+    $session2 = new CoreSession($this->kernel);
+    $session2->start();
+    $token2           = $session2->getSessionToken();
+    $hasFlashMessage2 = $session2->getHasFlashMessage();
+    self::assertTrue($hasFlashMessage2);
+    $session2->save();
+
+    $_COOKIE['ses_session_token'] = $token2;
+
+    $session3 = new CoreSession($this->kernel);
+    $session3->start();
+    $token3            = $session3->getSessionToken();
+    $hasFlashMessage3a = $session3->getHasFlashMessage();
+    self::assertTrue($hasFlashMessage3a);
+    $session3->setHasFlashMessage(false);
+    $hasFlashMessage3b = $session3->getHasFlashMessage();
+    self::assertFalse($hasFlashMessage3b);
+    $session3->save();
+
+    $_COOKIE['ses_session_token'] = $token3;
+
+    $session4 = new CoreSession($this->kernel);
+    $session4->start();
+    $hasFlashMessage4 = $session4->getHasFlashMessage();
+    self::assertFalse($hasFlashMessage4);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

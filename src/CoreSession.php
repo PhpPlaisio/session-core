@@ -133,6 +133,20 @@ class CoreSession extends PlaisioObject implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Returns true if and only if there are one or more flash messages saved in the current sessions.
+   *
+   * @return bool
+   *
+   * @since 4.0.0
+   * @api
+   */
+  public function getHasFlashMessage(): bool
+  {
+    return ($this->session['ses_has_flash_message']===1);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Returns the ID of preferred language of the user of the current session.
    *
    * @return int
@@ -265,7 +279,10 @@ class CoreSession extends PlaisioObject implements Session
     if ($this->session['ses_id']===null) return;
 
     $serial = (!empty($_SESSION)) ? serialize($_SESSION) : null;
-    $this->nub->DL->abcSessionCoreUpdateSession($this->session['cmp_id'], $this->session['ses_id'], $serial);
+    $this->nub->DL->abcSessionCoreUpdateSession($this->session['cmp_id'],
+                                                $this->session['ses_id'],
+                                                $this->session['ses_has_flash_message'],
+                                                $serial);
 
     foreach ($this->sections as $name => $section)
     {
@@ -284,6 +301,22 @@ class CoreSession extends PlaisioObject implements Session
           throw new FallenException('mode', $section['mode']);
       }
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Sets whether the current session has one or more flash messages.
+   *
+   * @param bool $hasFlashMessage If and only if true the current session has on or more flash messages.
+   *
+   * @return void
+   *
+   * @since 4.0.0
+   * @api
+   */
+  public function setHasFlashMessage(bool $hasFlashMessage): void
+  {
+    $this->session['ses_has_flash_message'] = $hasFlashMessage ? 1 : 0;
   }
 
   //--------------------------------------------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ begin
   ,      ses.ses_session_token
   ,      ses.ses_csrf_token
   ,      ses.ses_last_request
+  ,      ses.ses_has_flash_message
   ,      ses.ses_data
 
   ,      cmp.cmp_id
