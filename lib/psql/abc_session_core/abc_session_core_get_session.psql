@@ -1,5 +1,5 @@
 /**
- * Gets a session based a session token.
+ * Gets a session given a session token.
  *
  * @param p_cmp_id            The ID of the company of the user (safe guard).
  * @param p_ses_session_token The session token.
