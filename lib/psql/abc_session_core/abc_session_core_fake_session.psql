@@ -7,14 +7,14 @@ create procedure abc_session_core_fake_session(in p_cmp_id @abc_auth_session.cmp
 modifies sql data
 -- type: row1
 begin
-  select @abc_g_ses_id := null  as  ses_id
+  select @abc_g_ses_id := null  as ses_id
   ,      usr.cmp_id
   ,      usr.lan_id
-  ,      null
-  ,      null
-  ,      null
-  ,      null
-  ,      null
+  ,      null                   as ses_session_token
+  ,      null                   as ses_csrf_token
+  ,      null                   as ses_last_request
+  ,      0                      as ses_has_flash_message
+  ,      null                   as ses_data
 
   ,      @abc_g_usr_id := usr.usr_id  as  usr_id
   ,      usr.usr_anonymous
