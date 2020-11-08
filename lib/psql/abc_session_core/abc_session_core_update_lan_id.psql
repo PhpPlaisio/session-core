@@ -4,12 +4,13 @@
  * @param p_cmp_id The ID of the company (safe guard).
  * @param p_ses_id The ID of the session.
  * @param p_lan_id The ID of the new language.
+ *
+ * @type none
  */
 create procedure abc_session_core_update_lan_id(in p_cmp_id @abc_auth_session.cmp_id%type@,
                                                 in p_ses_id @abc_auth_session.ses_id%type@,
                                                 in p_lan_id @abc_auth_session.lan_id%type@)
 modifies sql data
--- type: none
 begin
   update ABC_AUTH_SESSION
   set    lan_id = p_lan_id

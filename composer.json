@@ -24,7 +24,7 @@
     "plaisio/db-user": "^1.1",
     "plaisio/language-resolver-core": "^1.3",
     "setbased/php-stratum": "^6.0",
-    "setbased/php-stratum-mysql": "^5.0"
+    "setbased/php-stratum-mysql": "^6.0"
   },
   "autoload": {
     "psr-4": {

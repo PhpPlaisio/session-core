@@ -2,10 +2,11 @@
  * Gets session data for an anonymous user.
  *
  * @param p_cmp_id The ID of the company.
+ *
+ * @type row1
  */
 create procedure abc_session_core_fake_session(in p_cmp_id @abc_auth_session.cmp_id%type@)
 modifies sql data
--- type: row1
 begin
   select @abc_g_ses_id := null  as ses_id
   ,      usr.cmp_id

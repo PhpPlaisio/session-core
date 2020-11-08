@@ -6,6 +6,8 @@
  * @param p_lan_id            The ID of the language of the session.
  * @param p_ses_session_token The new session token.
  * @param p_ses_csrf_token    The new CSRF token.
+ *
+ * @type row1
  */
 create procedure abc_session_core_logout(in p_cmp_id            @abc_auth_session.cmp_id%type@,
                                          in p_ses_id            @abc_auth_session.ses_id%type@,
@@ -13,7 +15,6 @@ create procedure abc_session_core_logout(in p_cmp_id            @abc_auth_sessio
                                          in p_ses_session_token @abc_auth_session.ses_session_token%type@,
                                          in p_ses_csrf_token    @abc_auth_session.ses_csrf_token%type@)
 modifies sql data
--- type: row1
 begin
   declare l_usr_id @abc_auth_user.usr_id%type@;
 

@@ -5,13 +5,14 @@
  * @param p_ses_id      The ID of the session.
  * @param p_ans_name    The name of the named section.
  * @param p_ans_data    The data of the named section.
+ *
+ * @type none
  */
 create procedure abc_session_core_named_section_update(in p_cmp_id      @abc_auth_session_named.cmp_id%type@,
                                                        in p_ses_id      @abc_auth_session_named.ses_id%type@,
                                                        in p_ans_name    @abc_auth_session_named.ans_name%type@,
                                                        in p_ans_data    @abc_auth_session_named.ans_data%type@)
 modifies sql data
--- type: none
 begin
   insert into ABC_AUTH_SESSION_NAMED( ses_id
   ,                                   cmp_id

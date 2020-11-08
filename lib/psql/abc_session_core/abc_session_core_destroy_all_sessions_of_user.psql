@@ -3,11 +3,12 @@
  *
  * @param p_cmp_id The ID of the company (safeguard).
  * @param p_usr_id The ID of the user.
+ *
+ * @type none
  */
 create procedure abc_session_core_destroy_all_sessions_of_user(in p_cmp_id @abc_auth_session.cmp_id%type@,
                                                                in p_usr_id @abc_auth_session.usr_id%type@)
 modifies sql data
--- type: none
 begin
   delete from ans
   using ABC_AUTH_SESSION_NAMED_LOCK  ans
