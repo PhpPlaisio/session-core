@@ -8,6 +8,7 @@ use Plaisio\Babel\CoreBabel;
 use Plaisio\C;
 use Plaisio\CompanyResolver\CompanyResolver;
 use Plaisio\CompanyResolver\UniCompanyResolver;
+use Plaisio\Cookie\CookieJar;
 use Plaisio\LanguageResolver\CoreLanguageResolver;
 use Plaisio\LanguageResolver\LanguageResolver;
 use Plaisio\PlaisioKernel;
@@ -41,6 +42,17 @@ class TestKernelSys extends PlaisioKernel
     $babel->setLanguage(C::LAN_ID_EN);
 
     return $babel;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the cookie jar.
+   *
+   * @return CookieJar
+   */
+  protected function getCookie(): CookieJar
+  {
+    return new CookieJar($_COOKIE);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

@@ -341,7 +341,7 @@ class CoreSession extends PlaisioObject implements Session
    */
   public function start(): void
   {
-    $sesSessionToken = $_COOKIE['ses_session_token'] ?? null;
+    $sesSessionToken = $this->nub->cookie->getValue('ses_session_token');
     if ($sesSessionToken===null)
     {
       // Start a new session.
