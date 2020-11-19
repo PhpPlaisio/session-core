@@ -395,7 +395,7 @@ class CoreSessionTest extends TestCase
     $token1 = $session1->getSessionToken();
     $session1->save();
 
-    $_COOKIE['ses_session_token'] = $token1;
+    $this->kernel->cookie->add(new Cookie(['name' => 'ses_session_token', 'value' => $token1]));
 
     $session2 = new CoreSession($this->kernel);
     $session2->start();
@@ -518,7 +518,7 @@ class CoreSessionTest extends TestCase
     $session->start();
     $token = $session->getSessionToken();
 
-    self::assertNotEquals($_COOKIE['ses_session_token'], $token);
+    self::assertNotEquals($this->kernel->cookie->getValue('ses_session_token'), $token);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
