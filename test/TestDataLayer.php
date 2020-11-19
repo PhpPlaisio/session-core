@@ -19,7 +19,7 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return array
    *
-   * @throws MySqlQueryErrorException;
+   * @throws MySqlQueryErrorException
    */
   public function abcBabelCoreInternalCodeMap(): array
   {
@@ -41,8 +41,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return array
    *
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcBabelCoreLanguageGetDetails(?int $pLanId): array
   {
@@ -60,8 +60,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return string
    *
-   * @throws MySqlDataLayerException;
-   * @throws ResultException;
+   * @throws MySqlDataLayerException
+   * @throws ResultException
    */
   public function abcBabelCoreTextGetText(?int $pTxtId, ?int $pLanId): string
   {
@@ -79,8 +79,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return string
    *
-   * @throws MySqlDataLayerException;
-   * @throws ResultException;
+   * @throws MySqlDataLayerException
+   * @throws ResultException
    */
   public function abcBabelCoreWordGetWord(?int $pWrdId, ?int $pLanId): string
   {
@@ -98,7 +98,7 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return int
    *
-   * @throws MySqlQueryErrorException;
+   * @throws MySqlQueryErrorException
    */
   public function abcSessionCoreDestroyAllSessionsOfUser(?int $pCmpId, ?int $pUsrId): int
   {
@@ -116,7 +116,7 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return int
    *
-   * @throws MySqlQueryErrorException;
+   * @throws MySqlQueryErrorException
    */
   public function abcSessionCoreDestroyOtherSessionsOfUser(?int $pCmpId, ?int $pSesId): int
   {
@@ -132,8 +132,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return array
    *
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcSessionCoreFakeSession(?int $pCmpId): array
   {
@@ -151,8 +151,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return array|null
    *
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcSessionCoreGetSession(?int $pCmpId, ?string $pSesSessionToken): ?array
   {
@@ -176,8 +176,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return array
    *
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcSessionCoreLogin(?int $pCmpId, ?int $pSesId, ?int $pUsrId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
   {
@@ -201,8 +201,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return array
    *
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcSessionCoreLogout(?int $pCmpId, ?int $pSesId, ?int $pLanId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
   {
@@ -222,7 +222,7 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return int
    *
-   * @throws MySqlQueryErrorException;
+   * @throws MySqlQueryErrorException
    */
   public function abcSessionCoreNamedSectionDelete(?int $pCmpId, ?int $pSesId, ?string $pAnsName): int
   {
@@ -244,8 +244,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return array|null
    *
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcSessionCoreNamedSectionGet(?int $pCmpId, ?int $pSesId, ?string $pAnsName, ?int $pMode): ?array
   {
@@ -267,9 +267,9 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return int
    *
-   * @throws MySqlDataLayerException;
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlDataLayerException
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcSessionCoreNamedSectionUpdate(?int $pCmpId, ?int $pSesId, ?string $pAnsName, ?string $pAnsData)
   {
@@ -324,8 +324,8 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return array
    *
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcSessionCoreStartSession(?int $pCmpId, ?int $pLanId, ?string $pSesSessionToken, ?string $pSesCsrfToken): array
   {
@@ -345,7 +345,7 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return int
    *
-   * @throws MySqlQueryErrorException;
+   * @throws MySqlQueryErrorException
    */
   public function abcSessionCoreUpdateLanId(?int $pCmpId, ?int $pSesId, ?int $pLanId): int
   {
@@ -367,9 +367,9 @@ class TestDataLayer extends MySqlDataLayer
    *
    * @return int
    *
-   * @throws MySqlDataLayerException;
-   * @throws MySqlQueryErrorException;
-   * @throws ResultException;
+   * @throws MySqlDataLayerException
+   * @throws MySqlQueryErrorException
+   * @throws ResultException
    */
   public function abcSessionCoreUpdateSession(?int $pCmpId, ?int $pSesId, ?int $pSesHasFlashMessage, ?string $pSesData)
   {

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Plaisio\Session;
 
+use Plaisio\Cookie\Cookie;
 use Plaisio\PlaisioObject;
 use SetBased\Exception\FallenException;
 use SetBased\Exception\LogicException;
@@ -421,23 +422,14 @@ class CoreSession extends PlaisioObject implements Session
     {
       $domain = $this->nub->canonicalHostnameResolver->getCanonicalHostname();
 
-      // Set session cookie.
-      setcookie('ses_session_token',
-                $this->session['ses_session_token'],
-                0,
-                '/',
-                $domain,
-                true,
-                true);
+      $this->nub->cookie->add(new Cookie(['name'   => 'ses_session_token',
+                                          'value'  => $this->session['ses_session_token'],
+                                          'domain' => $domain]));
 
-      // Set CSRF cookie.
-      setcookie('ses_csrf_token',
-                $this->session['ses_csrf_token'],
-                0,
-                '/',
-                $domain,
-                true,
-                false);
+      $this->nub->cookie->add(new Cookie(['name'     => 'ses_csrf_token',
+                                          'value'    => $this->session['ses_csrf_token'],
+                                          'domain'   => $domain,
+                                          'httpOnly' => false]));
     }
   }
 

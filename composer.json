@@ -9,6 +9,8 @@
   "license": "MIT",
   "require": {
     "php": ">=7.3",
+    "plaisio/canonical-hostname-resolver": "^1.2",
+    "plaisio/cookie": "^1.0",
     "plaisio/kernel": "^3.0",
     "plaisio/session": "^4.0"
   },
