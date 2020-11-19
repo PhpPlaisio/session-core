@@ -52,7 +52,7 @@ class TestKernelSys extends PlaisioKernel
    */
   protected function getCookie(): CookieJar
   {
-    return new CookieJar($_COOKIE);
+    return new CookieJar();
   }
 
   //--------------------------------------------------------------------------------------------------------------------
