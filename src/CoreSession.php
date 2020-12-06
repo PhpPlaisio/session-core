@@ -19,28 +19,28 @@ class CoreSession extends PlaisioObject implements Session
    *
    * @var int
    */
-  public static $entropyLength = 32;
+  public static int $entropyLength = 32;
 
   /**
    * The number of seconds before a session expires (default is 20 minutes).
    *
    * @var int
    */
-  public static $timeout = 1200;
+  public static int $timeout = 1200;
 
   /**
    * The named sections of this session.
    *
    * @var array
    */
-  protected $sections = [];
+  protected array $sections = [];
 
   /**
    * The session data.
    *
-   * @var array
+   * @var array|null
    */
-  protected $session;
+  protected ?array $session = null;
 
   //--------------------------------------------------------------------------------------------------------------------
   /**

@@ -1,6 +1,5 @@
 language: php
 php:
-  - '7.3'
   - '7.4'
 
 sudo: true
@@ -14,6 +13,7 @@ before_install:
   - mysql -u root -e "set global log_bin_trust_function_creators = 1;"
 
 install:
+  - pecl install inotify
   - composer self-update
   - composer update
 
