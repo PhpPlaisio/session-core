@@ -6,12 +6,15 @@ namespace Plaisio\Session\Test;
 use Plaisio\Babel\Babel;
 use Plaisio\Babel\CoreBabel;
 use Plaisio\C;
+use Plaisio\CanonicalHostnameResolver\CanonicalHostnameResolver;
+use Plaisio\CanonicalHostnameResolver\StaticCanonicalHostnameResolver;
 use Plaisio\CompanyResolver\CompanyResolver;
 use Plaisio\CompanyResolver\UniCompanyResolver;
 use Plaisio\Cookie\CookieJar;
 use Plaisio\LanguageResolver\CoreLanguageResolver;
 use Plaisio\LanguageResolver\LanguageResolver;
 use Plaisio\PlaisioKernel;
+use Plaisio\Request\CoreRequest;
 use SetBased\Stratum\MySql\MySqlDefaultConnector;
 
 /**
@@ -77,11 +80,31 @@ class TestKernelSys extends PlaisioKernel
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Creates the helper object for deriving the canonical hostname.
+   *
+   * @return CanonicalHostnameResolver
+   */
+  protected function getCanonicalHostnameResolver(): CanonicalHostnameResolver
+  {
+     return new StaticCanonicalHostnameResolver('www.example.com');
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * @return LanguageResolver
    */
   protected function getLanguageResolver(): LanguageResolver
   {
     return new CoreLanguageResolver($this, C::LAN_ID_EN);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * @return CoreRequest
+   */
+  protected function getRequest(): CoreRequest
+  {
+    return new CoreRequest();
   }
 
   //--------------------------------------------------------------------------------------------------------------------
