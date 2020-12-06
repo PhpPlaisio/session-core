@@ -341,7 +341,7 @@ class CoreSession extends PlaisioObject implements Session
    */
   public function start(): void
   {
-    $sesSessionToken = $this->nub->cookie->getValue('ses_session_token');
+    $sesSessionToken = $this->nub->request->getCookie('ses_session_token');
     if ($sesSessionToken===null)
     {
       // Start a new session.
@@ -418,7 +418,7 @@ class CoreSession extends PlaisioObject implements Session
    */
   protected function setCookies(): void
   {
-    if (isset($_SERVER['HTTPS']))
+    if ($this->nub->request->isSecureChannel())
     {
       $domain = $this->nub->canonicalHostnameResolver->getCanonicalHostname();
 

@@ -10,8 +10,9 @@
   "require": {
     "php": ">=7.4",
     "plaisio/canonical-hostname-resolver": "^1.2",
-    "plaisio/cookie": "^1.0",
+    "plaisio/cookie": "^2.0",
     "plaisio/kernel": "^3.1.1",
+    "plaisio/request": "^0.13.0",
     "plaisio/session": "^4.0"
   },
   "require-dev": {
