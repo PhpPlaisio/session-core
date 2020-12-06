@@ -11,6 +11,14 @@ build:
       pecl_extensions:
         - inotify
 
+  project_setup:
+    before:
+      - export PLAISIO_CONFIG_DIR=test
+      - ./bin/phing kernel
+      - mysql --version
+      - mysql -u root -e "set global binlog_format = 'row';"
+      - mysql -u root -e "set global log_bin_trust_function_creators = 1;"
+      -
   nodes:
     analysis:
       tests:
@@ -19,9 +27,6 @@ build:
 
     coverage:
       tests:
-        before:
-          - export PLAISIO_CONFIG_DIR=test
-          - ./bin/phing kernel
         override:
           - command: './bin/phing unit'
             coverage:
