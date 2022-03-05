@@ -1,7 +1,7 @@
 /**
- * Marks a user as successfully logged in in the current session.
+ * Marks a user as successfully logged-in in the current session.
  *
- * @param p_cmp_id            The ID of the company (safe guard).
+ * @param p_cmp_id            The ID of the company (safeguard).
  * @param p_ses_id            The ID of the session.
  * @param p_usr_id            The ID of the user.
  * @param p_ses_session_token The new session token.

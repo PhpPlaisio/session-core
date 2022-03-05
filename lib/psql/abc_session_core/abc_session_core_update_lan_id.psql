@@ -1,7 +1,7 @@
 /**
  * Updates the language of a session.
  *
- * @param p_cmp_id The ID of the company (safe guard).
+ * @param p_cmp_id The ID of the company (safeguard).
  * @param p_ses_id The ID of the session.
  * @param p_lan_id The ID of the new language.
  *

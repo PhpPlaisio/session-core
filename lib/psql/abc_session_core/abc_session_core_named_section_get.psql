@@ -1,7 +1,7 @@
 /**
  * Selects a named section of a session.
  *
- * @param p_cmp_id   The ID of the company (safe guard).
+ * @param p_cmp_id   The ID of the company (safeguard).
  * @param p_ses_id   The ID of the session.
  * @param p_ans_name The name of the named section.
  * @param p_mode     The lock mode for getting the named section.

@@ -144,7 +144,7 @@ class TestDataLayer extends MySqlDataLayer
   /**
    * Gets a session given a session token.
    *
-   * @param int|null    $pCmpId           The ID of the company of the user (safe guard).
+   * @param int|null    $pCmpId           The ID of the company of the user (safeguard).
    *                                      smallint(5) unsigned
    * @param string|null $pSesSessionToken The session token.
    *                                      varchar(64) character set ascii collation ascii_general_ci
@@ -161,9 +161,9 @@ class TestDataLayer extends MySqlDataLayer
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Marks a user as successfully logged in in the current session.
+   * Marks a user as successfully logged-in in the current session.
    *
-   * @param int|null    $pCmpId           The ID of the company (safe guard).
+   * @param int|null    $pCmpId           The ID of the company (safeguard).
    *                                      smallint(5) unsigned
    * @param int|null    $pSesId           The ID of the session.
    *                                      int(10) unsigned
@@ -188,7 +188,7 @@ class TestDataLayer extends MySqlDataLayer
   /**
    * Logs the current user out of the current session.
    *
-   * @param int|null    $pCmpId           The ID of the company (safe guard).
+   * @param int|null    $pCmpId           The ID of the company (safeguard).
    *                                      smallint(5) unsigned
    * @param int|null    $pSesId           The ID of the session.
    *                                      int(10) unsigned
@@ -213,7 +213,7 @@ class TestDataLayer extends MySqlDataLayer
   /**
    * Deletes a named section of a session.
    *
-   * @param int|null    $pCmpId   The ID of the company (safe guard).
+   * @param int|null    $pCmpId   The ID of the company (safeguard).
    *                              smallint(5) unsigned
    * @param int|null    $pSesId   The ID of the session.
    *                              int(10) unsigned
@@ -233,7 +233,7 @@ class TestDataLayer extends MySqlDataLayer
   /**
    * Selects a named section of a session.
    *
-   * @param int|null    $pCmpId   The ID of the company (safe guard).
+   * @param int|null    $pCmpId   The ID of the company (safeguard).
    *                              smallint(5) unsigned
    * @param int|null    $pSesId   The ID of the session.
    *                              int(10) unsigned
@@ -313,7 +313,7 @@ class TestDataLayer extends MySqlDataLayer
   /**
    * Starts a new session.
    *
-   * @param int|null    $pCmpId           The ID of the company of the user (safe guard).
+   * @param int|null    $pCmpId           The ID of the company of the user (safeguard).
    *                                      smallint(5) unsigned
    * @param int|null    $pLanId           The ID of the language of the session.
    *                                      tinyint(3) unsigned
@@ -336,7 +336,7 @@ class TestDataLayer extends MySqlDataLayer
   /**
    * Updates the language of a session.
    *
-   * @param int|null $pCmpId The ID of the company (safe guard).
+   * @param int|null $pCmpId The ID of the company (safeguard).
    *                         smallint(5) unsigned
    * @param int|null $pSesId The ID of the session.
    *                         int(10) unsigned
@@ -356,7 +356,7 @@ class TestDataLayer extends MySqlDataLayer
   /**
    * Updates a session.
    *
-   * @param int|null    $pCmpId              The ID of the company (safe guard).
+   * @param int|null    $pCmpId              The ID of the company (safeguard).
    *                                         smallint(5) unsigned
    * @param int|null    $pSesId              The ID of the session.
    *                                         int(10) unsigned

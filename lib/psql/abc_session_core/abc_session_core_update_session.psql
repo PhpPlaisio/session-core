@@ -1,7 +1,7 @@
 /**
  * Updates a session.
  *
- * @param p_cmp_id                The ID of the company (safe guard).
+ * @param p_cmp_id                The ID of the company (safeguard).
  * @param p_ses_id                The ID of the session.
  * @param p_ses_has_flash_message If and only if 1 there are one or more flash messages.
  * @param p_ses_data              The new additional data of the session.
