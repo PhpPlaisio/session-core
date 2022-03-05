@@ -271,7 +271,7 @@ class TestDataLayer extends MySqlDataLayer
    * @throws MySqlQueryErrorException
    * @throws ResultException
    */
-  public function abcSessionCoreNamedSectionUpdate(?int $pCmpId, ?int $pSesId, ?string $pAnsName, ?string $pAnsData)
+  public function abcSessionCoreNamedSectionUpdate(?int $pCmpId, ?int $pSesId, ?string $pAnsName, ?string $pAnsData): int
   {
     $query = 'call abc_session_core_named_section_update('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteString($pAnsName).',?)';
     $stmt  = @$this->mysqli->prepare($query);
@@ -371,7 +371,7 @@ class TestDataLayer extends MySqlDataLayer
    * @throws MySqlQueryErrorException
    * @throws ResultException
    */
-  public function abcSessionCoreUpdateSession(?int $pCmpId, ?int $pSesId, ?int $pSesHasFlashMessage, ?string $pSesData)
+  public function abcSessionCoreUpdateSession(?int $pCmpId, ?int $pSesId, ?int $pSesHasFlashMessage, ?string $pSesData): int
   {
     $query = 'call abc_session_core_update_session('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteInt($pSesHasFlashMessage).',?)';
     $stmt  = @$this->mysqli->prepare($query);

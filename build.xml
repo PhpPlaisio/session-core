@@ -6,6 +6,7 @@
             <arg value="update"/>
         </exec>
         <phing phingfile="build.xml" target="kernel" haltonfailure="true"/>
+        <phing phingfile="build.xml" target="outdated" haltonfailure="true"/>
     </target>
 
     <target name="kernel">
@@ -16,6 +17,15 @@
         <exec executable="bin/plaisio" checkreturn="true" passthru="true">
             <arg value="--ansi"/>
             <arg value="plaisio:kernel-properties"/>
+        </exec>
+    </target>
+
+    <!-- Show outdated packages -->
+    <target name="outdated">
+        <exec executable="composer" checkreturn="false" passthru="true">
+            <arg value="--ansi"/>
+            <arg value="outdated"/>
+            <arg value="--direct"/>
         </exec>
     </target>
 
