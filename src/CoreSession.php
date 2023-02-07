@@ -15,7 +15,7 @@ class CoreSession extends PlaisioObject implements Session
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * The number of bytes the be read from the source of randomness.
+   * The number of bytes to be read from the source of randomness.
    *
    * @var int
    */
@@ -173,7 +173,7 @@ class CoreSession extends PlaisioObject implements Session
    * @since 1.0.0
    * @api
    */
-  public function &getNamedSection(string $name, int $mode)
+  public function &getNamedSection(string $name, int $mode): mixed
   {
     if (!isset($this->sections[$name]))
     {
@@ -329,7 +329,10 @@ class CoreSession extends PlaisioObject implements Session
   public function setLanId(int $lanId): void
   {
     // Return immediately for fake (a.k.a. non-persistent) sessions.
-    if ($this->session['ses_id']===null) return;
+    if ($this->session['ses_id']===null)
+    {
+      return;
+    }
 
     $this->session['lan_id'] = $lanId;
     $this->nub->DL->abcSessionCoreUpdateLanId($this->session['cmp_id'], $this->session['ses_id'], $lanId);
@@ -463,7 +466,7 @@ class CoreSession extends PlaisioObject implements Session
    * @since 1.0.0
    * @api
    */
-  private function saveNamedSection(string $name, $data): void
+  private function saveNamedSection(string $name, mixed $data): void
   {
     if ($data===null)
     {

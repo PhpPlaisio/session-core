@@ -2,6 +2,8 @@
 /.phpunit.result.cache
 /bin/
 /composer.lock
+/custom.task.properties
+/custom.type.properties
 /lib/psql/babel-core
 /test/coverage.xml
 /test/etc/columns.txt
