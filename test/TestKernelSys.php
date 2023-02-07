@@ -66,7 +66,7 @@ class TestKernelSys extends PlaisioKernel
    */
   protected function getDL(): TestDataLayer
   {
-    $connector = new MySqlDefaultConnector('localhost', 'test', 'test', 'test');
+    $connector = new MySqlDefaultConnector('127.0.0.1', 'test', 'test', 'test');
     $dl        = new TestDataLayer($connector);
     $dl->connect();
     $dl->begin();
