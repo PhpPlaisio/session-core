@@ -134,7 +134,7 @@ class CoreSession extends PlaisioObject implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if and only if there are one or more flash messages saved in the current sessions.
+   * Returns whether there are one or more flash messages saved in the current sessions.
    *
    * @return bool
    *
@@ -219,7 +219,7 @@ class CoreSession extends PlaisioObject implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns true if the user is anonymous (i.e. not a user who has logged in). Otherwise, returns false.
+   * Returns whether the user is anonymous (i.e. not a user who has logged in).
    *
    * @return bool
    */
@@ -230,7 +230,7 @@ class CoreSession extends PlaisioObject implements Session
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Updates the session that an user has successfully logged in.
+   * Updates the session that a user has successfully logged in.
    *
    * @param int $usrId The ID the user.
    */
