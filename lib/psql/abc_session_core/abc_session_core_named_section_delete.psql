@@ -9,9 +9,9 @@
  */
 create procedure abc_session_core_named_section_delete
 (
-  in p_cmp_id   smallint(5) unsigned, --             type:  ABC_AUTH_SESSION_NAMED.cmp_id
-  in p_ses_id   int(10) unsigned, --                 type:  ABC_AUTH_SESSION_NAMED.ses_id
-  in p_ans_name varchar(128) character set latin1 -- type:   ABC_AUTH_SESSION_NAMED.ans_name
+  in p_cmp_id   smallint(5) unsigned, --              type: ABC_AUTH_SESSION_NAMED.cmp_id
+  in p_ses_id   int(10) unsigned, --                  type: ABC_AUTH_SESSION_NAMED.ses_id
+  in p_ans_name varchar(128) character set utf8mb4 -- type: ABC_AUTH_SESSION_NAMED.ans_name
 )
   modifies sql data
 begin
