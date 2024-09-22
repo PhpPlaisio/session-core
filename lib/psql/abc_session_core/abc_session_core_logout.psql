@@ -9,42 +9,43 @@
  *
  * @type row1
  */
-create procedure abc_session_core_logout(in p_cmp_id            @abc_auth_session.cmp_id%type@,
-                                         in p_ses_id            @abc_auth_session.ses_id%type@,
-                                         in p_lan_id            @abc_auth_session.lan_id%type@,
-                                         in p_ses_session_token @abc_auth_session.ses_session_token%type@,
-                                         in p_ses_csrf_token    @abc_auth_session.ses_csrf_token%type@)
-modifies sql data
+create procedure abc_session_core_logout
+(
+  in p_cmp_id            smallint(5) unsigned, --            type: ABC_AUTH_SESSION.cmp_id
+  in p_ses_id            int(10) unsigned, --                type: ABC_AUTH_SESSION.ses_id
+  in p_lan_id            tinyint(3) unsigned, --             type: ABC_AUTH_SESSION.lan_id
+  in p_ses_session_token varchar(64) character set ascii, -- type: ABC_AUTH_SESSION.ses_session_token
+  in p_ses_csrf_token    varchar(64) character set ascii --  type: ABC_AUTH_SESSION.ses_csrf_token
+)
+  modifies sql data
 begin
-  declare l_usr_id @abc_auth_user.usr_id%type@;
+  declare l_usr_id int(10) unsigned; -- type: ABC_AUTH_USER.usr_id
 
   select usr_id
-  into   l_usr_id
-  from   ABC_AUTH_USER
-  where  cmp_id        = p_cmp_id
-  and    usr_anonymous = 1
-  ;
+  into l_usr_id
+  from ABC_AUTH_USER
+  where cmp_id = p_cmp_id
+    and usr_anonymous = 1;
 
-  delete from ABC_AUTH_SESSION_NAMED_LOCK
+  delete
+  from ABC_AUTH_SESSION_NAMED_LOCK
   where ses_id = p_ses_id
-  and   cmp_id = p_cmp_id
-  ;
+    and cmp_id = p_cmp_id;
 
-  delete from ABC_AUTH_SESSION_NAMED
+  delete
+  from ABC_AUTH_SESSION_NAMED
   where ses_id = p_ses_id
-  and   cmp_id = p_cmp_id
-  ;
+    and cmp_id = p_cmp_id;
 
   update ABC_AUTH_SESSION
-  set usr_id                = l_usr_id
-  ,   lan_id                = p_lan_id
-  ,   ses_session_token     = p_ses_session_token
-  ,   ses_csrf_token        = p_ses_csrf_token
-  ,   ses_has_flash_message = 0
-  ,   ses_data              = null
+  set usr_id                = l_usr_id,
+      lan_id                = p_lan_id,
+      ses_session_token     = p_ses_session_token,
+      ses_csrf_token        = p_ses_csrf_token,
+      ses_has_flash_message = 0,
+      ses_data              = null
   where ses_id = p_ses_id
-  and   cmp_id = p_cmp_id
-  ;
+    and cmp_id = p_cmp_id;
 
   call abc_session_core_get_session(p_cmp_id, p_ses_session_token);
 end

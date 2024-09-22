@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Plaisio\Session\Test;
 
-use SetBased\Stratum\MySql\Exception\MySqlQueryErrorException;
 use SetBased\Stratum\Middle\Exception\ResultException;
 use SetBased\Stratum\MySql\Exception\MySqlDataLayerException;
+use SetBased\Stratum\MySql\Exception\MySqlQueryErrorException;
 use SetBased\Stratum\MySql\MySqlDataLayer;
 
 /**
@@ -25,9 +25,15 @@ class TestDataLayer extends MySqlDataLayer
   {
     $result = $this->query('call abc_babel_core_internal_code_map()');
     $ret = [];
-    while (($row = $result->fetch_array(MYSQLI_NUM))) $ret[$row[0]] = $row[1];
+    while (($row = $result->fetch_array(MYSQLI_NUM)))
+    {
+      $ret[$row[0]] = $row[1];
+    }
     $result->free();
-    if ($this->mysqli->more_results()) $this->mysqli->next_result();
+    if ($this->mysqli->more_results())
+    {
+      $this->mysqli->next_result();
+    }
 
     return $ret;
   }
@@ -275,11 +281,17 @@ class TestDataLayer extends MySqlDataLayer
   {
     $query = 'call abc_session_core_named_section_update('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteString($pAnsName).',?)';
     $stmt  = @$this->mysqli->prepare($query);
-    if (!$stmt) throw $this->dataLayerError('mysqli::prepare');
+    if (!$stmt)
+    {
+      throw $this->dataLayerError('mysqli::prepare');
+    }
 
     $null = null;
     $success = @$stmt->bind_param('b', $null);
-    if (!$success) throw $this->dataLayerError('mysqli_stmt::bind_param');
+    if (!$success)
+    {
+      throw $this->dataLayerError('mysqli_stmt::bind_param');
+    }
 
     $this->getMaxAllowedPacket();
 
@@ -312,7 +324,10 @@ class TestDataLayer extends MySqlDataLayer
     $ret = $this->mysqli->affected_rows;
 
     $stmt->close();
-    if ($this->mysqli->more_results()) $this->mysqli->next_result();
+    if ($this->mysqli->more_results())
+    {
+      $this->mysqli->next_result();
+    }
 
     return $ret;
   }
@@ -383,11 +398,17 @@ class TestDataLayer extends MySqlDataLayer
   {
     $query = 'call abc_session_core_update_session('.$this->quoteInt($pCmpId).','.$this->quoteInt($pSesId).','.$this->quoteInt($pSesHasFlashMessage).',?)';
     $stmt  = @$this->mysqli->prepare($query);
-    if (!$stmt) throw $this->dataLayerError('mysqli::prepare');
+    if (!$stmt)
+    {
+      throw $this->dataLayerError('mysqli::prepare');
+    }
 
     $null = null;
     $success = @$stmt->bind_param('b', $null);
-    if (!$success) throw $this->dataLayerError('mysqli_stmt::bind_param');
+    if (!$success)
+    {
+      throw $this->dataLayerError('mysqli_stmt::bind_param');
+    }
 
     $this->getMaxAllowedPacket();
 
@@ -420,7 +441,10 @@ class TestDataLayer extends MySqlDataLayer
     $ret = $this->mysqli->affected_rows;
 
     $stmt->close();
-    if ($this->mysqli->more_results()) $this->mysqli->next_result();
+    if ($this->mysqli->more_results())
+    {
+      $this->mysqli->next_result();
+    }
 
     return $ret;
   }

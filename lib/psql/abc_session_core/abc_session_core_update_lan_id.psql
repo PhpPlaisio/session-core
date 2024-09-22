@@ -7,14 +7,16 @@
  *
  * @type none
  */
-create procedure abc_session_core_update_lan_id(in p_cmp_id @abc_auth_session.cmp_id%type@,
-                                                in p_ses_id @abc_auth_session.ses_id%type@,
-                                                in p_lan_id @abc_auth_session.lan_id%type@)
-modifies sql data
+create procedure abc_session_core_update_lan_id
+(
+  in p_cmp_id smallint(5) unsigned, -- type: ABC_AUTH_SESSION.cmp_id
+  in p_ses_id int(10) unsigned, --     type: ABC_AUTH_SESSION.ses_id
+  in p_lan_id tinyint(3) unsigned --   type: ABC_AUTH_SESSION.lan_id
+)
+  modifies sql data
 begin
   update ABC_AUTH_SESSION
-  set    lan_id = p_lan_id
-  where  ses_id = p_ses_id
-  and    cmp_id = p_cmp_id
-  ;
+  set lan_id = p_lan_id
+  where ses_id = p_ses_id
+    and cmp_id = p_cmp_id;
 end

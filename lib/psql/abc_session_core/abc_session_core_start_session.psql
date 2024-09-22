@@ -1,36 +1,38 @@
 /**
  * Starts a new session.
  *
- * @param p_cmp_id          The ID of the company of the user (safeguard).
+ * @param p_cmp_id            The ID of the company of the user (safeguard).
  * @param p_lan_id            The ID of the language of the session.
  * @param p_ses_session_token The session token.
  * @param p_ses_csrf_token    The CSRF token.
  *
  * @type row1
  */
-create procedure abc_session_core_start_session(in p_cmp_id            @abc_auth_session.cmp_id%type@,
-                                                in p_lan_id            @abc_auth_session.lan_id%type@,
-                                                in p_ses_session_token @abc_auth_session.ses_session_token%type@,
-                                                in p_ses_csrf_token    @abc_auth_session.ses_csrf_token%type@)
-modifies sql data
+create procedure abc_session_core_start_session
+(
+  in p_cmp_id            smallint(5) unsigned, --            type: ABC_AUTH_SESSION.cmp_id
+  in p_lan_id            tinyint(3) unsigned, --             type: ABC_AUTH_SESSION.lan_id
+  in p_ses_session_token varchar(64) character set ascii, -- type: ABC_AUTH_SESSION.ses_session_token
+  in p_ses_csrf_token    varchar(64) character set ascii --  type: ABC_AUTH_SESSION.ses_csrf_token
+)
+  modifies sql data
 begin
-  insert into ABC_AUTH_SESSION(cmp_id
-  ,                            lan_id
-  ,                            usr_id
-  ,                            ses_session_token
-  ,                            ses_csrf_token
-  ,                            ses_last_request)
+  insert into ABC_AUTH_SESSION( cmp_id
+                              , lan_id
+                              , usr_id
+                              , ses_session_token
+                              , ses_csrf_token
+                              , ses_last_request )
   select cmp.cmp_id
-  ,      p_lan_id
-  ,      usr.usr_id
-  ,      p_ses_session_token
-  ,      p_ses_csrf_token
-  ,      unix_timestamp()
-  from       ABC_AUTH_COMPANY cmp
-  inner join ABC_AUTH_USER    usr  on  usr.cmp_id = cmp.cmp_id
-  where cmp.cmp_id        = p_cmp_id
-  and   usr.usr_anonymous = 1
-  ;
+       , p_lan_id
+       , usr.usr_id
+       , p_ses_session_token
+       , p_ses_csrf_token
+       , unix_timestamp()
+  from ABC_AUTH_COMPANY cmp
+  join ABC_AUTH_USER    usr on usr.cmp_id = cmp.cmp_id
+  where cmp.cmp_id = p_cmp_id
+    and usr.usr_anonymous = 1;
 
   call abc_session_core_get_session(p_cmp_id, p_ses_session_token);
 end

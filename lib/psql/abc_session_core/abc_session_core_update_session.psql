@@ -8,17 +8,19 @@
  *
  * @type none
  */
-create procedure abc_session_core_update_session(in p_cmp_id                @abc_auth_session.cmp_id%type@,
-                                                 in p_ses_id                @abc_auth_session.ses_id%type@,
-                                                 in p_ses_has_flash_message @abc_auth_session.ses_has_flash_message%type@,
-                                                 in p_ses_data              @abc_auth_session.ses_data%type@)
-modifies sql data
+create procedure abc_session_core_update_session
+(
+  in p_cmp_id                smallint(5) unsigned, -- type: ABC_AUTH_SESSION.cmp_id
+  in p_ses_id                int(10) unsigned, --     type: ABC_AUTH_SESSION.ses_id
+  in p_ses_has_flash_message tinyint(1), --           type: ABC_AUTH_SESSION.ses_has_flash_message
+  in p_ses_data              longblob --              type: ABC_AUTH_SESSION.ses_data
+)
+  modifies sql data
 begin
   update ABC_AUTH_SESSION
-  set    ses_last_request      = unix_timestamp()
-  ,      ses_has_flash_message = p_ses_has_flash_message
-  ,      ses_data              = p_ses_data
-  where  ses_id = p_ses_id
-  and    cmp_id = p_cmp_id
-  ;
+  set ses_last_request      = unix_timestamp(),
+      ses_has_flash_message = p_ses_has_flash_message,
+      ses_data              = p_ses_data
+  where ses_id = p_ses_id
+    and cmp_id = p_cmp_id;
 end

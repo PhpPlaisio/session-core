@@ -8,40 +8,40 @@
  *
  * @type row0
  */
-create procedure abc_session_core_named_section_get(in p_cmp_id   @abc_auth_session_named.cmp_id%type@,
-                                                    in p_ses_id   @abc_auth_session_named.ses_id%type@,
-                                                    in p_ans_name @abc_auth_session_named.ans_name%type@,
-                                                    in p_mode     int)
-modifies sql data
+create procedure abc_session_core_named_section_get
+(
+  in p_cmp_id   smallint(5) unsigned, --              type: ABC_AUTH_SESSION_NAMED.cmp_id
+  in p_ses_id   int(10) unsigned, --                  type: ABC_AUTH_SESSION_NAMED.ses_id
+  in p_ans_name varchar(128) character set latin1, -- type: ABC_AUTH_SESSION_NAMED.ans_name
+  in p_mode     int
+)
+  modifies sql data
 begin
-  declare l_ses_id @abc_auth_session_named.ses_id%type@;
+  declare l_ses_id int(10) unsigned; -- type: ABC_AUTH_SESSION_NAMED.ses_id
 
-  if (p_mode=2) then
+  if (p_mode = 2) then
     --  Exclusive mode.
     select ses_id
-    into   l_ses_id
-    from   ABC_AUTH_SESSION_NAMED_LOCK
-    where  ses_id   = p_ses_id
-    and    cmp_id   = p_cmp_id
-    and    ans_name = p_ans_name
-    for update
-    ;
+    into l_ses_id
+    from ABC_AUTH_SESSION_NAMED_LOCK
+    where ses_id = p_ses_id
+      and cmp_id = p_cmp_id
+      and ans_name = p_ans_name for
+    update;
 
     if (l_ses_id is null) then
       insert into ABC_AUTH_SESSION_NAMED_LOCK( ses_id
-      ,                                        cmp_id
-      ,                                        ans_name )
-      values( p_ses_id
-      ,       p_cmp_id
-      ,       p_ans_name )
-      ;
+                                             , cmp_id
+                                             , ans_name )
+      values ( p_ses_id
+             , p_cmp_id
+             , p_ans_name );
     end if;
   end if;
 
   select ans_data
-  from   ABC_AUTH_SESSION_NAMED
-  where  ses_id   = p_ses_id
-  and    cmp_id   = p_cmp_id
-  and    ans_name = p_ans_name
-  ;
+  from ABC_AUTH_SESSION_NAMED
+  where ses_id = p_ses_id
+    and cmp_id = p_cmp_id
+    and ans_name = p_ans_name;
 end

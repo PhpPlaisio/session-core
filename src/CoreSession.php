@@ -161,7 +161,7 @@ class CoreSession extends PlaisioObject implements Session
   /**
    * Returns a reference to the data of a named section of the session.
    *
-   * If the named section does not yet exists a reference to null is returned. Only named sessions opened in exclusive
+   * If the named section does not yet exist a reference to null is returned. Only named sessions opened in exclusive
    * mode will be saved by @param string $name The name of the named section.
    *
    * @param int $mode The mode for getting the named section.

@@ -6,37 +6,37 @@
  *
  * @type none
  */
-create procedure abc_session_core_destroy_other_sessions_of_user(in p_cmp_id @abc_auth_session.cmp_id%type@,
-                                                                 in p_ses_id @abc_auth_session.ses_id%type@)
-modifies sql data
+create procedure abc_session_core_destroy_other_sessions_of_user
+(
+  in p_cmp_id smallint(5) unsigned, -- type: ABC_AUTH_SESSION.cmp_id
+  in p_ses_id int(10) unsigned --      type: ABC_AUTH_SESSION.ses_id
+)
+  modifies sql data
 begin
-  declare l_usr_id @abc_auth_session.usr_id%type@;
+  declare l_usr_id int(10) unsigned; -- type: ABC_AUTH_SESSION.usr_id
 
   select usr_id
-  into   l_usr_id
-  from   ABC_AUTH_SESSION
-  where  ses_id = p_ses_id
-  ;
+  into l_usr_id
+  from ABC_AUTH_SESSION
+  where ses_id = p_ses_id;
 
-  delete from ans
-  using ABC_AUTH_SESSION_NAMED_LOCK  ans
-  join  ABC_AUTH_SESSION             ses  on  ses.ses_id = ans.ses_id
-  where ses.cmp_id  = p_cmp_id
-  and   ses.usr_id  = l_usr_id
-  and   ses.ses_id <> p_ses_id
-  ;
+  delete
+  from ans using ABC_AUTH_SESSION_NAMED_LOCK ans
+                   join ABC_AUTH_SESSION ses on ses.ses_id = ans.ses_id
+  where ses.cmp_id = p_cmp_id
+    and ses.usr_id = l_usr_id
+    and ses.ses_id <> p_ses_id;
 
-  delete from ans
-  using ABC_AUTH_SESSION_NAMED ans
-  join  ABC_AUTH_SESSION       ses  on  ses.ses_id = ans.ses_id
-  where ses.cmp_id  = p_cmp_id
-  and   ses.usr_id  = l_usr_id
-  and   ses.ses_id <> p_ses_id
-  ;
+  delete
+  from ans using ABC_AUTH_SESSION_NAMED ans
+                   join ABC_AUTH_SESSION ses on ses.ses_id = ans.ses_id
+  where ses.cmp_id = p_cmp_id
+    and ses.usr_id = l_usr_id
+    and ses.ses_id <> p_ses_id;
 
-  delete from ABC_AUTH_SESSION
-  where cmp_id  = p_cmp_id
-  and   usr_id  = l_usr_id
-  and   ses_id <> p_ses_id
-  ;
+  delete
+  from ABC_AUTH_SESSION
+  where cmp_id = p_cmp_id
+    and usr_id = l_usr_id
+    and ses_id <> p_ses_id;
 end
