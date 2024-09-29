@@ -12,9 +12,9 @@
     "plaisio/canonical-hostname-resolver": "^1.3.0",
     "plaisio/cookie": "^2.1.0",
     "plaisio/kernel": "^3.2.1",
-    "plaisio/request": "^0.13.1",
+    "plaisio/request": "^1.0.0",
     "plaisio/session": "^5.0.0",
-    "setbased/php-stratum-mysql": "^7.0.0"
+    "setbased/php-stratum-mysql": "^7.0.1"
   },
   "require-dev": {
     "ext-mysqli": "*",
@@ -27,8 +27,8 @@
     "plaisio/db-company": "^1.2.0",
     "plaisio/db-profile": "^1.2.0",
     "plaisio/db-user": "^1.3.0",
-    "plaisio/language-resolver-core": "^1.4.0",
-    "plaisio/request-core": "^0.13.0",
+    "plaisio/language-resolver-core": "^1.5.0",
+    "plaisio/request-core": "^1.0.0",
     "setbased/php-stratum": "^6.3.1"
   },
   "autoload": {
