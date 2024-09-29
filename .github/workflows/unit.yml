@@ -16,8 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "8.1"
-          - "8.2"
           - "8.3"
         mysql-version:
           - "mysql-5.7"
@@ -61,3 +59,11 @@ jobs:
 
       - name: "Run tests with PHPUnit"
         run:  "bin/phing unit"
+
+      - name: "Upload to Codecov"
+        uses: "codecov/codecov-action@v4"
+        with:
+          files:   "test/coverage.xml"
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
