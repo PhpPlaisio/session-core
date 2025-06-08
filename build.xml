@@ -50,7 +50,6 @@
         </exec>
     </target>
 
-    <target name="build">
-        <echo message=""/>
+    <target name="build" depends="update,unit">
     </target>
 </project>

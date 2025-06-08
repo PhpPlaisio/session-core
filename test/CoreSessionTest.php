@@ -23,30 +23,40 @@ class CoreSessionTest extends TestCase
   private PlaisioKernel $kernel;
 
   //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Creates a core session.
+   */
+  private function createSession(): CoreSession
+  {
+    unset($this->kernel->request);
 
+    return new CoreSession($this->kernel);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test method destroyOtherSessionsOfUser.
    */
   public function testDestroyAllSessionsOfUser(): void
   {
     unset($_COOKIE['ses_session_token']);
-    $session31 = new CoreSession($this->kernel);
+    $session31 = $this->createSession();
     $session31->start();
     $session31->login(3);
-    $section1          = &$session31->getNamedSection('section_exclusive', CoreSession::SECTION_EXCLUSIVE);
-    $section2          = &$session31->getNamedSection('section_exclusive', CoreSession::SECTION_SHARED);
+    $section1          = &$session31->getNamedSection('section_exclusive', Session::SECTION_EXCLUSIVE);
+    $section2          = &$session31->getNamedSection('section_exclusive', Session::SECTION_SHARED);
     $section1['hello'] = 'world';
     $section2['foo']   = 'bar';
     $session31->save();
 
     unset($_COOKIE['ses_session_token']);
-    $session4 = new CoreSession($this->kernel);
+    $session4 = $this->createSession();
     $session4->start();
     $session4->login(4);
     $session31->save();
 
     unset($_COOKIE['ses_session_token']);
-    $session32 = new CoreSession($this->kernel);
+    $session32 = $this->createSession();
     $session32->start();
     $session32->login(3);
     $session31->save();
@@ -56,21 +66,21 @@ class CoreSessionTest extends TestCase
 
     // Assert session31 has been destroyed.
     $_COOKIE['ses_session_token'] = $session31->getSessionToken();
-    $session                      = new CoreSession($this->kernel);
+    $session                      = $this->createSession();
     $session->start();
     self::assertNotEquals($session31->sesId, $session->sesId);
     self::assertNotEquals($session31->getSessionToken(), $session->getSessionToken());
 
     // Assert session32 has been destroyed.
     $_COOKIE['ses_session_token'] = $session32->getSessionToken();
-    $session                      = new CoreSession($this->kernel);
+    $session                      = $this->createSession();
     $session->start();
     self::assertNotEquals($session31->sesId, $session->sesId);
     self::assertNotEquals($session31->getSessionToken(), $session->getSessionToken());
 
-    // Assert session4 (other user) is still alive.
+    // Assert session4 (of another user) is still alive.
     $_COOKIE['ses_session_token'] = $session4->getSessionToken();
-    $session                      = new CoreSession($this->kernel);
+    $session                      = $this->createSession();
     $session->start();
     self::assertSame($session4->sesId, $session->sesId);
     self::assertSame($session4->getSessionToken(), $session->getSessionToken());
@@ -83,23 +93,23 @@ class CoreSessionTest extends TestCase
   public function testDestroyOtherSessionsOfUser(): void
   {
     unset($_COOKIE['ses_session_token']);
-    $session31 = new CoreSession($this->kernel);
+    $session31 = $this->createSession();
     $session31->start();
     $session31->login(3);
-    $section1          = &$session31->getNamedSection('section_exclusive', CoreSession::SECTION_EXCLUSIVE);
-    $section2          = &$session31->getNamedSection('section_exclusive', CoreSession::SECTION_SHARED);
+    $section1          = &$session31->getNamedSection('section_exclusive', Session::SECTION_EXCLUSIVE);
+    $section2          = &$session31->getNamedSection('section_exclusive', Session::SECTION_SHARED);
     $section1['hello'] = 'world';
     $section2['foo']   = 'bar';
     $session31->save();
 
     unset($_COOKIE['ses_session_token']);
-    $session4 = new CoreSession($this->kernel);
+    $session4 = $this->createSession();
     $session4->start();
     $session4->login(4);
     $session31->save();
 
     unset($_COOKIE['ses_session_token']);
-    $session32 = new CoreSession($this->kernel);
+    $session32 = $this->createSession();
     $session32->start();
     $session32->login(3);
     $session31->save();
@@ -107,23 +117,23 @@ class CoreSessionTest extends TestCase
     // Destroy other sessions (hence session31)
     $session32->destroyOtherSessions();
 
-    // Assert session31 (same user, other session) has been destroyed.
+    // Assert session31 (same user, another session) has been destroyed.
     $_COOKIE['ses_session_token'] = $session31->getSessionToken();
-    $session                      = new CoreSession($this->kernel);
+    $session                      = $this->createSession();
     $session->start();
     self::assertNotEquals($session31->sesId, $session->sesId);
     self::assertNotEquals($session31->getSessionToken(), $session->getSessionToken());
 
     // Assert session32 is still alive.
     $_COOKIE['ses_session_token'] = $session32->getSessionToken();
-    $session                      = new CoreSession($this->kernel);
+    $session                      = $this->createSession();
     $session->start();
     self::assertSame($session32->sesId, $session->sesId);
     self::assertSame($session32->getSessionToken(), $session->getSessionToken());
 
-    // Assert session4 (other user) is still alive.
+    // Assert session4 (of another user) is still alive.
     $_COOKIE['ses_session_token'] = $session4->getSessionToken();
-    $session                      = new CoreSession($this->kernel);
+    $session                      = $this->createSession();
     $session->start();
     self::assertSame($session4->sesId, $session->sesId);
     self::assertSame($session4->getSessionToken(), $session->getSessionToken());
@@ -137,7 +147,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
     $token1             = $session1->getSessionToken();
     $_SESSION['string'] = 'hello world';
@@ -148,7 +158,7 @@ class CoreSessionTest extends TestCase
     CoreSession::$timeout = 3;
     sleep(5);
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
     $token2 = $session2->getSessionToken();
 
@@ -164,7 +174,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
     $session1->login(3);
     $token1             = $session1->getSessionToken();
@@ -179,7 +189,7 @@ class CoreSessionTest extends TestCase
     CoreSession::$timeout = 3;
     sleep(5);
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
     $token2 = $session2->getSessionToken();
 
@@ -197,7 +207,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session = new CoreSession($this->kernel);
+    $session = $this->createSession();
     $session->start();
     $hasFlashMessage = $session->getHasFlashMessage();
 
@@ -212,7 +222,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
     $token1            = $session1->getSessionToken();
     $hasFlashMessage1a = $session1->getHasFlashMessage();
@@ -224,7 +234,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
     $token2           = $session2->getSessionToken();
     $hasFlashMessage2 = $session2->getHasFlashMessage();
@@ -233,7 +243,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token2;
 
-    $session3 = new CoreSession($this->kernel);
+    $session3 = $this->createSession();
     $session3->start();
     $token3            = $session3->getSessionToken();
     $hasFlashMessage3a = $session3->getHasFlashMessage();
@@ -245,7 +255,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token3;
 
-    $session4 = new CoreSession($this->kernel);
+    $session4 = $this->createSession();
     $session4->start();
     $hasFlashMessage4 = $session4->getHasFlashMessage();
     self::assertFalse($hasFlashMessage4);
@@ -259,7 +269,7 @@ class CoreSessionTest extends TestCase
   {
     unset($_COOKIE['ses_session_token']);
 
-    $session = new CoreSession($this->kernel);
+    $session = $this->createSession();
     $session->start();
 
     self::assertNotNull($session->getSessionToken());
@@ -275,7 +285,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session = new CoreSession($this->kernel);
+    $session = $this->createSession();
     $session->start();
     $proId = $session->proId;
 
@@ -290,7 +300,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session = new CoreSession($this->kernel);
+    $session = $this->createSession();
     $session->start();
     $_SESSION['array']  = ['hello' => 'world'];
     $_SESSION['string'] = 'hello world';
@@ -313,7 +323,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
     $session1->login(3);
     $token1             = $session1->getSessionToken();
@@ -323,7 +333,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
 
     self::assertEquals(['hello' => 'world'], $_SESSION['array']);
@@ -335,10 +345,10 @@ class CoreSessionTest extends TestCase
     self::assertEmpty($_SESSION);
     self::assertNotEquals($token1, $token2);
 
-    // Asset that token1 does not valid any more.
+    // Asset that token1 is not valid anymore.
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session3 = new CoreSession($this->kernel);
+    $session3 = $this->createSession();
     $session3->start();
     $token3 = $session3->getSessionToken();
 
@@ -351,7 +361,7 @@ class CoreSessionTest extends TestCase
    */
   public function testNamedSection1(): void
   {
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
 
     $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_EXCLUSIVE);
@@ -364,7 +374,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
 
     $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
@@ -377,7 +387,7 @@ class CoreSessionTest extends TestCase
    */
   public function testNamedSectionReadOnly1(): void
   {
-    $session0 = new CoreSession($this->kernel);
+    $session0 = $this->createSession();
     $session0->start();
 
     $data = &$session0->getNamedSection(__CLASS__, Session::SECTION_EXCLUSIVE);
@@ -390,7 +400,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token0;
 
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
 
     $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
@@ -404,7 +414,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
 
     $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
@@ -417,7 +427,7 @@ class CoreSessionTest extends TestCase
    */
   public function testNamedSectionReadOnly2(): void
   {
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
 
     $data = &$session1->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
@@ -430,7 +440,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
 
     $data = &$session2->getNamedSection(__CLASS__, Session::SECTION_READ_ONLY);
@@ -445,7 +455,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
     $token1 = $session1->getSessionToken();
     $lanId1 = $session1->getLanId();
@@ -454,7 +464,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
     $lanId2 = $session1->getLanId();
 
@@ -470,7 +480,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session = new CoreSession($this->kernel);
+    $session = $this->createSession();
     $session->start();
 
     self::assertNotNull($session->getSessionToken());
@@ -484,7 +494,7 @@ class CoreSessionTest extends TestCase
   {
     unset($_COOKIE['ses_session_token']);
 
-    $session = new CoreSession($this->kernel);
+    $session = $this->createSession();
     $session->start();
 
     self::assertNotNull($session->getSessionToken());
@@ -498,14 +508,14 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
     $token1 = $session1->getSessionToken();
     $session1->save();
 
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
     $token2 = $session2->getSessionToken();
     $session2->save();
@@ -521,7 +531,7 @@ class CoreSessionTest extends TestCase
   {
     $_COOKIE['ses_session_token'] = 'not-a-known-session-token';
 
-    $session = new CoreSession($this->kernel);
+    $session = $this->createSession();
     $session->start();
     $token = $session->getSessionToken();
 
@@ -530,13 +540,13 @@ class CoreSessionTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test start session with known session token from other company.
+   * Test start session with a known session token from another company.
    */
   public function testStart05(): void
   {
     $_COOKIE['ses_session_token'] = null;
 
-    $session1 = new CoreSession($this->kernel);
+    $session1 = $this->createSession();
     $session1->start();
     $token1 = $session1->getSessionToken();
     $sesId1 = $session1->sesId;
@@ -548,7 +558,7 @@ class CoreSessionTest extends TestCase
 
     $_COOKIE['ses_session_token'] = $token1;
 
-    $session2 = new CoreSession($this->kernel);
+    $session2 = $this->createSession();
     $session2->start();
     $token2 = $session2->getSessionToken();
     $sesId2 = $session2->sesId;
@@ -566,8 +576,8 @@ class CoreSessionTest extends TestCase
    */
   protected function setUp(): void
   {
-    $this->kernel     = new TestKernelPlaisio();
     $_SERVER['HTTPS'] = 'on';
+    $this->kernel     = new TestKernelPlaisio();
   }
 
   //--------------------------------------------------------------------------------------------------------------------
