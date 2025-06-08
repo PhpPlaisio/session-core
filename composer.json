@@ -42,7 +42,7 @@
     },
     "classmap": [
       "test/C.php"
-      ]
+    ]
   },
   "config": {
     "bin-dir": "bin/",
