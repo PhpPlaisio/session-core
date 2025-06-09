@@ -27,7 +27,7 @@
     "plaisio/db-company": "^1.3.0",
     "plaisio/db-profile": "^1.3.0",
     "plaisio/db-user": "^1.4.0",
-    "plaisio/language-resolver-core": "^1.5.0",
+    "plaisio/language-resolver-core": "^1.6.0",
     "plaisio/request-core": "^1.1.0",
     "setbased/php-stratum": "^6.5.0"
   },
