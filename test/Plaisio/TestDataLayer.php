@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Plaisio\Session\Test;
+namespace Plaisio\Session\Test\Plaisio;
 
 use SetBased\Stratum\Middle\Exception\ResultException;
 use SetBased\Stratum\MySql\Exception\MySqlDataLayerException;

@@ -14,10 +14,10 @@ class C
    *
    * Below this doc block constants will be inserted by PhpStratum.
    */
-  const CMP_ID_PLAISIO = 2;
-  const CMP_ID_SYS     = 1;
-  const LAN_ID_EN      = 1;
-  const LAN_ID_NL      = 2;
+  public const int CMP_ID_PLAISIO = 2;
+  public const int CMP_ID_SYS     = 1;
+  public const int LAN_ID_EN      = 1;
+  public const int LAN_ID_NL      = 2;
 
   //--------------------------------------------------------------------------------------------------------------------
 }

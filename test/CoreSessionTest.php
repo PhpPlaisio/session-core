@@ -8,6 +8,8 @@ use Plaisio\C;
 use Plaisio\PlaisioKernel;
 use Plaisio\Session\CoreSession;
 use Plaisio\Session\Session;
+use Plaisio\Session\Test\Plaisio\TestKernelPlaisio;
+use Plaisio\Session\Test\Plaisio\TestKernelSys;
 
 /**
  * Test cases for class CoreSession.

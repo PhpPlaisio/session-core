@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Plaisio\Session\Test;
+namespace Plaisio\Session\Test\Plaisio;
 
 use Plaisio\Babel\Babel;
 use Plaisio\Babel\CoreBabel;
@@ -15,6 +15,7 @@ use Plaisio\LanguageResolver\CoreLanguageResolver;
 use Plaisio\LanguageResolver\LanguageResolver;
 use Plaisio\PlaisioKernel;
 use Plaisio\Request\CoreRequest;
+use Plaisio\Session\Test\Plaisio\TestRequestParameterResolver;
 use SetBased\Stratum\MySql\MySqlDefaultConnector;
 
 /**
@@ -104,7 +105,7 @@ class TestKernelSys extends PlaisioKernel
    */
   protected function getRequest(): CoreRequest
   {
-    return new CoreRequest($_SERVER, $_COOKIE);
+    return new CoreRequest($_SERVER,  $_GET, $_POST,  $_COOKIE, new TestRequestParameterResolver());
   }
 
   //--------------------------------------------------------------------------------------------------------------------

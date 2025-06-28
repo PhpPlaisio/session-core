@@ -423,7 +423,7 @@ class CoreSession extends PlaisioObject implements Session
   {
     if ($this->nub->request->isSecureChannel)
     {
-      $domain = $this->nub->canonicalHostnameResolver->getCanonicalHostname();
+      $domain = $this->nub->canonicalHostnameResolver->canonicalHostname;
 
       $this->nub->cookie->add(new Cookie(['name'   => 'ses_session_token',
                                           'value'  => $this->session['ses_session_token'],
